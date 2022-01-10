@@ -2,5 +2,6 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/ovsa85241095/public_html/
-    - /bin/cp -r * $DEPLOYPATH
-    - /bin/cp * $DEPLOYPATH
+    - /bin/cp -r database $DEPLOYPATH
+    - /bin/cp -r resources $DEPLOYPATH
+    - /bin/cp .env $DEPLOYPATH
