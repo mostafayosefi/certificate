@@ -1,0 +1,2177 @@
+/* calendar */
+var urlHashes = ['v=', 'f1=', 'f2=', 'f3=', 'f4=', 'f5=', 'f6=', 'f7=', 'f8=', 'f9=', 'f10='];
+var vHashes = [];
+var f1Hashes = [];
+var f2Hashes = [];
+var f3Hashes = [];
+var f4Hashes = [];
+var f5Hashes = [];
+var f6Hashes = [];
+var f7Hashes = [];
+var f8Hashes = [];
+var f9Hashes = [];
+var f10Hashes = [];
+var allHashes = "";
+var today = moment();
+var currentDate = moment().format('D');
+var currentMonth = moment().format('MM');
+var currentYear = moment().format('YYYY');
+var nextMonth = moment().add(1, 'month').format('MM');
+if (nextMonth == "01") {
+    var nextMonthYear = moment().add(1, 'year').format('YYYY');
+} else {
+    var nextMonthYear = moment().format('YYYY');
+}
+var previousMonth = moment().subtract(1, 'month').format('MM');
+if (previousMonth == "12") {
+    var previousMonthYear = moment().subtract(1, 'year').format('YYYY');
+} else {
+    var previousMonthYear = moment().format('YYYY');
+}
+var checkedEvents = [];
+var allData = [];
+var allDataURLs = [];
+var currentDataURLs = [];
+var currentData = [];
+var sideFeatures = [];
+var sideFeaturesURL = [];
+var currentLoadedView = defaultView;
+var lastLoadedMonth = "";
+var lastLoadedYear = "";
+var currentURL = window.location.href;
+var hash = "";
+var newHash = "";
+var hashClass = "";
+var hashArray = [];
+var newHashArray = [];
+var newSetHashArray = [];
+var setFiltersLoad = "";
+var eventsContainer = $(".events .events-list");
+var featuredEventsContainer = $(".featured-events-list");
+var eventList = "";
+var eventItem = "";
+var loadMoreContainer = $(".events .load-more");
+var eventViewHeader = $("h1#events-view");
+var eventViewCountDisplay = $(".events-results .event-count");
+var eventFilterViewCountDisplay = $(".events-results .filter-count");
+var eventsMessageContainer = $(".events-results .events-message");
+var eventsMessage = "";
+var errorMessage = false;
+var rangeDates = [];
+var rangeDateStart = "";
+var rangeDateEnd = "";
+var startYearRange = "";
+var endYearRange = "";
+var startMonthRange = "";
+var endMonthRange = "";
+var startDayRange = "";
+var endDayRange = "";
+var singleDate = "";
+var singleDateYear = "";
+var singleDateMonth = "";
+var singleDateDay = "";
+var startDate = "";
+var endDate = "";
+
+$(document).ready(function() {
+
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 100) {
+            $("#back-to-top").fadeIn();
+        } else {
+            $("#back-to-top").fadeOut();
+        }
+    });
+
+    $("#back-to-top").click(function() {
+        $("body,html").animate({
+            scrollTop: 0
+        }, 800);
+        return false;
+    });
+
+    if ($('.events-listing').length) {
+        $('#mini-calendar .input-daterange').datepicker({
+            todayHighlight: true,
+        });
+        $('#startDate').datepicker().on('changeDate', function(startDateData) {
+
+            startDate = moment(startDateData.date).format("MM/DD/YYYY");
+            if (endDate == "" || endDate == startDate) {
+                setHash("v=", "replace", startDate, function() {
+                    eventCount();
+                    loadView(startDate).then(function(results) {
+                        showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+                    });
+                });
+            } else {
+                setHash("v=", "replace", startDate + "-" + endDate, function() {
+                    eventCount();
+                    loadView(startDate + "-" + endDate).then(function(results) {
+                        showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+                    });
+                });
+            }
+        });
+        $('#endDate').datepicker().on('changeDate', function(endDateData) {
+
+            if (startDate != "") {
+                endDate = moment(endDateData.date).format("MM/DD/YYYY");
+                if (startDate == endDate) {
+                    setHash("v=", "replace", startDate, function() {
+                        loadView(startDate).then(function(results) {
+                            showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+                        });
+                    });
+                } else {
+                    setHash("v=", "replace", startDate + "-" + endDate, function() {
+                        loadView(startDate + "-" + endDate).then(function(results) {
+                            showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+                        });
+                    });
+                }
+            }
+        });
+        $(".date-views button").click(function() {
+            $(".date-views button").each(function() {
+                $(this).removeClass("active");
+            });
+            $(this).addClass("active");
+        });
+        $(eventsContainer).tooltip({
+            selector: "[data-toggle='tooltip']"
+        });
+        $(".hh-events .plus-toggle").click(function() {
+            $(".hh-events .plus-toggle").toggleClass("fa-plus-circle fa-minus-circle");
+            $(".hh-events .sidebar").toggleClass("expanded collapsed");
+            if ($(".hh-events .sidebar").hasClass("expanded")) {
+                $(".hh-events .plus-toggle").attr("title", "Collapse");
+                $(".hh-events .plus-toggle ~ span").html("Collapse");
+            } else {
+                $(".hh-events .plus-toggle").attr("title", "Expand");
+                $(".hh-events .plus-toggle ~ span").html("Expand");
+            }
+        });
+        $(".checkboxes input").click(function() {
+            $(this).blur();
+        });
+        $(".events").on('click', '.loadMoreEvents', function() {
+            if (debugMode) {
+                console.log("------------------------");
+                console.log("loadMoreEvents");
+            }
+            showEvents(currentData, currentLoadedView, eventsContainer, loadMoreCount, "loadMore");
+            searchText($("#search").val().toLowerCase());
+        });
+        $(".events").on('click', '.loadAllEvents', function() {
+            if (debugMode) {
+                console.log("------------------------");
+                console.log("loadAllEvents");
+            }
+            showEvents(currentData, currentLoadedView, eventsContainer, "all", "loadAll");
+            searchText($("#search").val().toLowerCase());
+        });
+        $(".clearAll").on("click", function() {
+            if (debugMode) {
+                console.log("------------------------");
+                console.log("clearAll");
+            }
+            $(this).blur();
+            $(eventFilterViewCountDisplay).empty();
+            $(eventViewCountDisplay).empty();
+            $('.input-daterange input').datepicker('update', null);
+            $('.input-daterange').datepicker('updateDates');
+            removeHash();
+            $("#search").val('');
+            setViewsLoad = "";
+            setFiltersLoad = "";
+            $("select.loadFilter").val("*");
+            $(".loadFilter:checkbox:checked").each(function() {
+                $(this).prop("checked", false);
+            });
+            $(".date-views button").each(function() {
+                $(this).removeClass("active");
+            });
+            loadView(defaultView, "", "", "clearAll").then(function(results) {
+                showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+            });
+        });
+        checkHash();
+        $(window).on('popstate', function() {
+            checkHash();
+        });
+    }
+
+    if ($('.events-detail').length) {
+        $('.events-detail').tooltip({
+            selector: "[data-toggle='tooltip']"
+        });
+        if ($('.events-detail .sTime').length) {
+            var sZone = moment.tz.guess();
+            var sTimezone = moment.tz(sZone).zoneAbbr();
+            $(".events-detail .sTime").append(timeOutput(thisCurrentEvent[0].startDate, thisCurrentEvent[0].endDate, thisCurrentEvent[0].allDay, thisCurrentEvent[0].originalStart));
+            if (thisCurrentEvent[0].allDay != "true") {
+                $(".events-detail .sTime").append(" " + sTimezone);
+            }
+        }
+        if ($('.events-detail .rDate').length) {
+            currentRecurringEvent();
+            $("#rDates").change(function(e) {
+                $(".save-row .feeds").empty();
+                $(".save-row .feeds").append(saveLinkOutput($(this).find(':selected').data('title'), $(this).find(':selected').data('desc'), $(this).find(':selected').data('start'), $(this).find(':selected').data('end'), $(this).find(':selected').data('timezone'), $(this).find(':selected').data('allDay'), "google"));
+                $(".save-row .feeds").append(saveLinkOutput($(this).find(':selected').data('title'), $(this).find(':selected').data('desc'), $(this).find(':selected').data('start'), $(this).find(':selected').data('end'), $(this).find(':selected').data('timezone'), $(this).find(':selected').data('allDay'), "outlook"));
+                $(".save-row .feeds").append(saveLinkOutput($(this).find(':selected').data('title'), $(this).find(':selected').data('desc'), $(this).find(':selected').data('start'), $(this).find(':selected').data('end'), $(this).find(':selected').data('timezone'), $(this).find(':selected').data('allDay'), "yahoo"));
+                $(".save-row .feeds").append(saveLinkOutput($(this).find(':selected').data('title'), $(this).find(':selected').data('desc'), $(this).find(':selected').data('start'), $(this).find(':selected').data('end'), $(this).find(':selected').data('timezone'), $(this).find(':selected').data('allDay'), "ics"));
+            });
+            setTimeout(function() {
+                if ($('.events-detail .related-events').length) {
+                    relatedEventsAjax();
+                }
+            }, 300);
+        } else {
+            if ($('.events-detail .related-events').length) {
+                relatedEventsAjax();
+            }
+        }
+
+    }
+
+    if ($('.hh-events-block').length) {
+        blockEvents();
+    }
+
+});
+
+/* data */
+function checkDataURLs(data, view, target, showLimit, origin) {
+    return new Promise(function(resolve, reject) {
+        if (debugMode) {
+            console.log("checkDataURLs");
+        }
+        awaitAll(data, getDataFromURLs).then(function(results) {
+            var URLData = [];
+            results.forEach(function(r) {
+                URLData = URLData.concat(r);
+            });
+            calculateRecurrences(URLData).then(function(resultsR) {
+                eventDateChecker(URLData, resultsR, view).then(function(results) {
+                    jsonToCurrentData(results).then(function(results) {
+                        results.jsonToCurrentDataEvents.sort(function(a, b) {
+                            return +new Date(a.startDate) - +new Date(b.startDate);
+                        });
+                        resolve({
+                            "events": results.jsonToCurrentDataEvents,
+                            "view": view,
+                            "target": target,
+                            "showLimit": showLimit,
+                            "origin": origin
+                        });
+                        // 		showEvents(results.jsonToCurrentDataEvents, view, target, showLimit, origin);
+                    });
+                });
+            });
+        });
+        // 	}
+    })
+}
+
+function getFeaturedDataFromURLs(currentDataURL) {
+    return new Promise(function(resolve, reject) {
+        if (debugMode) {
+            console.log("getFeaturedDataFromURLs: " + currentDataURL);
+        }
+        $.ajax({
+            url: currentDataURL,
+            success: function(data) {
+                resolve(data.events);
+            },
+            error: function(data) {
+                if (data.status == 200) {
+                    resolve({
+                        Error: "JSON Not Valid: " + currentDataURL
+                    });
+                    console.log("JSON Not Valid: " + currentDataURL);
+                } else {
+                    resolve({
+                        Error: "Data URL Not Found: " + currentDataURL
+                    });
+                    console.log("Data URL Not Found: " + currentDataURL);
+                }
+            }
+        });
+
+    })
+}
+
+function getDataFromURLs(currentDataURL) {
+    return new Promise(function(resolve, reject) {
+        if (_.includes(allDataURLs, currentDataURL)) {
+            if (debugMode) {
+                console.log("getDataFromURLs bypassed: " + currentDataURL);
+            }
+            resolve(allData);
+        } else {
+            if (debugMode) {
+                console.log("getDataFromURLs: " + currentDataURL);
+            }
+
+            $.ajax({
+                url: currentDataURL,
+                success: function(data) {
+                    if (debugMode) {
+                        console.log({
+                            "allData": allData
+                        });
+                    }
+                    allData = allData.concat(data.events);
+                    if (debugMode) {
+                        console.log({
+                            "allData": allData
+                        });
+                    }
+                    resolve(data.events);
+                    allDataURLs.push(currentDataURL);
+                },
+                error: function(data) {
+                    if (data.status == 200) {
+                        resolve({
+                            Error: "JSON Not Valid: " + currentDataURL
+                        });
+                        console.log("JSON Not Valid: " + currentDataURL);
+                    } else {
+                        resolve({
+                            Error: "Data URL Not Found: " + currentDataURL
+                        });
+                        console.log("Data URL Not Found: " + currentDataURL);
+                    }
+                }
+            });
+        }
+    })
+}
+
+function eventDateChecker(data, dataR, view) {
+    return new Promise(function(resolve, reject) {
+        checkedEvents = [];
+        if (debugMode) {
+            console.log("eventDateChecker: " + view);
+        }
+        if (view === "featured" || view === "side-featured-events") {
+            $.each(data, function(i, v) {
+                if (v.featured == "true" && v.recurringEvent != "true") {
+                    eventDateCheck(v, view);
+                }
+            });
+            $.each(dataR, function(i, v) {
+                if (v.featured == "true") {
+                    eventDateCheck(v, view);
+                }
+            });
+        } else {
+            $.each(data, function(i, v) {
+                if (v.recurringEvent != "true") {
+                    eventDateCheck(v, view);
+                }
+            });
+            $.each(dataR, function(i, v) {
+                eventDateCheck(v, view);
+            });
+        }
+        resolve(checkedEvents);
+    })
+}
+
+function eventDateCheck(v, view) {
+    if (v.startDate != undefined) {
+        if (view === "upcoming-events" || view === "featured" || view === "side-featured-events" || view === "related-events" || view === "current-recurring-event" || view === "hh-events-block") {
+            if (moment(v.startDate).isSameOrAfter(moment())) {
+                checkedEvents.push(v);
+            }
+        } else if (view === "today") {
+            if (moment().isSame(moment(v.startDate), 'date')) {
+                checkedEvents.push(v);
+            }
+        } else if (view === "tomorrow") {
+            if (moment(moment(today).add(1, 'days')).isSame(moment(v.startDate), 'date')) {
+                checkedEvents.push(v);
+            }
+        } else if (view === "this-week") {
+            if (moment(moment(v.startDate)).isSameOrAfter(moment().weekday(0), "day") && moment(moment(v.startDate)).isSameOrBefore(moment().weekday(6), "day")) {
+                checkedEvents.push(v);
+            }
+        } else if (view === "this-weekend") {
+            if (moment(moment(v.startDate)).isSameOrAfter(moment().weekday(5), "day") && moment(moment(v.startDate)).isSameOrBefore(moment().weekday(7), "day")) {
+                checkedEvents.push(v);
+            }
+        } else if (view === "next-week") {
+            if (moment(moment(v.startDate)).isSameOrAfter(moment().weekday(7), "day") && moment(moment(v.startDate)).isSameOrBefore(moment().weekday(13), "day")) {
+                checkedEvents.push(v);
+            }
+        } else if (view === "this-month") {
+            if (moment().isSame(moment(v.startDate), 'month')) {
+                checkedEvents.push(v);
+            }
+        } else if (view === "next-month") {
+            if (moment().add(1, 'months').isSame(moment(v.startDate), 'month')) {
+                checkedEvents.push(v);
+            }
+        } else {
+            if (view === undefined || view == "") {
+                checkedEvents.push(v);
+            } else {;
+                if (view.indexOf("-") > -1) {
+                    if (moment(v.startDate).isSameOrAfter(moment(rangeDateStart, "MM/DD/YYYY")) && moment(v.startDate).isSameOrBefore(moment(rangeDateEnd, "MM/DD/YYYY"))) {
+                        checkedEvents.push(v);
+                    }
+                } else {
+                    if (moment(v.startDate).isSame(moment(view, "MM/DD/YYYY"), "day")) {
+                        checkedEvents.push(v);
+                    }
+                }
+            }
+        }
+    }
+}
+
+function jsonToCurrentData(data, view) {
+    return new Promise(function(resolve, reject) {
+        var jsonToCurrentDataEvents = [];
+        data.forEach(function(v) {
+            cdEvent = {};
+            cdEvent.id = v.id;
+            cdEvent.title = v.title;
+            cdEvent.startDate = v.startDate;
+            cdEvent.endDate = v.endDate;
+            cdEvent.originalStart = v.originalStart;
+            cdEvent.allDay = v.allDay;
+            cdEvent.description = v.description;
+            cdEvent.recurringEvent = v.recurringEvent;
+            cdEvent.tooltip = v.tooltip;
+            cdEvent.image = v.image;
+            cdEvent.alt = v.alt;
+            cdEvent.featured = v.featured;
+            if (filter1) {
+                cdEvent.filter1 = v.filter1;
+            }
+            if (filter2) {
+                cdEvent.filter2 = v.filter2;
+            }
+            if (filter3) {
+                cdEvent.filter3 = v.filter3;
+            }
+            if (filter4) {
+                cdEvent.filter4 = v.filter4;
+            }
+            if (filter5) {
+                cdEvent.filter5 = v.filter5;
+            }
+            if (filter6) {
+                cdEvent.filter6 = v.filter6;
+            }
+            if (filter7) {
+                cdEvent.filter7 = v.filter7;
+            }
+            if (filter8) {
+                cdEvent.filter8 = v.filter8;
+            }
+            if (filter9) {
+                cdEvent.filter9 = v.filter9;
+            }
+            if (filter10) {
+                cdEvent.filter10 = v.filter10;
+            }
+            if (v.additionDetails) {
+                v.additionDetails.forEach(function(detail) {
+                    if (detail.icon == 'fas fa-map-marker-alt') {
+                        cdEvent.location = detail.text;
+                    }
+                });
+            }
+            cdEvent.url = v.url;
+            jsonToCurrentDataEvents.push(cdEvent);
+        });
+        resolve({
+            jsonToCurrentDataEvents: jsonToCurrentDataEvents
+        });
+    });
+}
+
+function eventCount() {
+    $(eventsMessageContainer).empty();
+    $(eventViewCountDisplay).empty();
+    $(eventFilterViewCountDisplay).empty();
+    if ($(".events-list .row.event").length != $(".events-list .filter-match").length) {
+        $(eventViewCountDisplay).html("Loaded <span>" + $(".events-list .row.event").length + "</span> event(s)");
+        $(eventFilterViewCountDisplay).html(", showing <span>" + $(".events-list .filter-match").length + "</span> that meet your filter/search criteria. ");
+    } else {
+        $(eventViewCountDisplay).html("Showing <span>" + $(".events-list .row.event").length + "</span> event(s). ")
+    }
+    if ($(".events-list .row.event").length <= 4 || $(".events-list .filter-match").length <= 4) {
+        $(".events-results2").hide();
+    } else {
+        $(".events-results2").show();
+    }
+}
+
+/* details */
+
+function eventHTML(v, col) {
+    if (col == undefined) {
+        col = 6;
+    }
+    eventItem = '';
+    eventItem += '<div class="col-sm-12 col-md-6 col-lg-4 col-xl-' + col + ' event">';
+    eventItem += '<a href="' + v.url + '" target="_parent">';
+    eventItem += imageOutput(v.image, v.startDate);
+    eventItem += '<h3 class="title">';
+    eventItem += v.title;
+    eventItem += '</h3>';
+    eventItem += '</a>';
+    eventItem += '<div class="details">';
+    if (v.featured == "true") {
+        eventItem += '<div class="featured">';
+        eventItem += '<span class="far fa-star" aria-hidden="true"></span>';
+        eventItem += '</div>';
+    }
+    if (v.recurringEvent == "true") {
+        eventItem += '<div class="recurrence">';
+        eventItem += '<span class="fas fa-sync-alt" title="' + v.tooltip + '" data-toggle="tooltip" data-placement="bottom" tabindex="0">';
+        eventItem += '</span>';
+        eventItem += '</div>';
+    }
+    eventItem += '<div class="time">' + timeOutput(v.startDate, v.endDate, v.allDay, v.originalStart) + '</div>';
+    eventItem += '<div class="date">' + dateOutput(v.startDate, v.endDate) + '</div>';
+    eventItem += '</div>';
+    eventItem += '</div>';
+    return eventItem;
+}
+
+function getRelatedEvents(data) {
+    return new Promise(function(resolve) {
+        $.each(data, function(i, v) {
+            eventList += eventHTML(v);
+        });
+        resolve({
+            data: data,
+            events: eventList
+        });
+    })
+}
+
+/* event */
+function showEvents(data, view, target, showLimit, origin) {
+    getEvents(data, showLimit, origin).then(function(results) {
+        if (debugMode) {
+            console.log("showEvents");
+        }
+        target.empty();
+        target.append(results.events);
+        searchText($("#search").val().toLowerCase());
+        eventCount();
+        if (setFiltersLoad.length > 0) {
+            showFilter(setFiltersLoad, "showEvents")
+        }
+        if (view != "side-featured-events") {
+            currentData = [];
+            $(loadMoreContainer).hide();
+            if (showLimit != "all") {
+                currentData = _.drop(results.data, showLimit);
+                if (currentData.length > 0) {
+                    if (debugMode) {
+                        console.log("show loadMore");
+                    }
+                    $(loadMoreContainer).show();
+                }
+            }
+        }
+    })
+}
+
+function getEvents(data, showLimit, origin) {
+    return new Promise(function(resolve, reject) {
+        if (debugMode) {
+            console.log("getEvents");
+        }
+        $.each(data, function(i, v) {
+            var eventsListFilterDots = [];
+            var eventsListFilterTexts = [];
+            var filterClasses = [];
+            if (v.filter1) {
+                $.each(v.filter1, function(i, v) {
+                    filterClasses.push(v.replace(/\s/g, "-").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "-").toLowerCase());
+                });
+                if (filter1EventsList != "No") {
+                    if (filter1EventsList == "dots") {
+                        $.each(v.filter1, function(i, v) {
+                            eventsListFilterDots.push({
+                                "filter": "f1",
+                                "name": v
+                            });
+                        });
+                    } else {
+                        $.each(v.filter1, function(i, v) {
+                            eventsListFilterTexts.push(v);
+                        });
+                    }
+                }
+            }
+            if (v.filter2) {
+                $.each(v.filter2, function(i, v) {
+                    filterClasses.push(v.replace(/\s/g, "-").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "-").toLowerCase());
+                });
+                if (filter2EventsList != "No") {
+                    if (filter2EventsList == "dots") {
+                        $.each(v.filter2, function(i, v) {
+                            eventsListFilterDots.push({
+                                "filter": "f2",
+                                "name": v
+                            });
+                        });
+                    } else {
+                        $.each(v.filter2, function(i, v) {
+                            eventsListFilterTexts.push(v);
+                        });
+                    }
+                }
+            }
+            if (v.filter3) {
+                $.each(v.filter3, function(i, v) {
+                    filterClasses.push(v.replace(/\s/g, "-").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "-").toLowerCase());
+                });
+                if (filter3EventsList != "No") {
+                    if (filter3EventsList == "dots") {
+                        $.each(v.filter3, function(i, v) {
+                            eventsListFilterDots.push({
+                                "filter": "f3",
+                                "name": v
+                            });
+                        });
+                    } else {
+                        $.each(v.filter3, function(i, v) {
+                            eventsListFilterTexts.push(v);
+                        });
+                    }
+                }
+            }
+            if (v.filter4) {
+                $.each(v.filter4, function(i, v) {
+                    filterClasses.push(v.replace(/\s/g, "-").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "-").toLowerCase());
+                });
+                if (filter4EventsList != "No") {
+                    if (filter4EventsList == "dots") {
+                        $.each(v.filter4, function(i, v) {
+                            eventsListFilterDots.push({
+                                "filter": "f4",
+                                "name": v
+                            });
+                        });
+                    } else {
+                        $.each(v.filter4, function(i, v) {
+                            eventsListFilterTexts.push(v);
+                        });
+                    }
+                }
+            }
+            if (v.filter5) {
+                $.each(v.filter5, function(i, v) {
+                    filterClasses.push(v.replace(/\s/g, "-").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "-").toLowerCase());
+                });
+                if (filter5EventsList != "No") {
+                    if (filter5EventsList == "dots") {
+                        $.each(v.filter5, function(i, v) {
+                            eventsListFilterDots.push({
+                                "filter": "f5",
+                                "name": v
+                            });
+                        });
+                    } else {
+                        $.each(v.filter5, function(i, v) {
+                            eventsListFilterTexts.push(v);
+                        });
+                    }
+                }
+            }
+            if (v.filter6) {
+                $.each(v.filter6, function(i, v) {
+                    filterClasses.push(v.replace(/\s/g, "-").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "-").toLowerCase());
+                });
+                if (filter6EventsList != "No") {
+                    if (filter6EventsList == "dots") {
+                        $.each(v.filter6, function(i, v) {
+                            eventsListFilterDots.push({
+                                "filter": "f6",
+                                "name": v
+                            });
+                        });
+                    } else {
+                        $.each(v.filter6, function(i, v) {
+                            eventsListFilterTexts.push(v);
+                        });
+                    }
+                }
+            }
+            if (v.filter7) {
+                $.each(v.filter7, function(i, v) {
+                    filterClasses.push(v.replace(/\s/g, "-").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "-").toLowerCase());
+                });
+                if (filter7EventsList != "No") {
+                    if (filter7EventsList == "dots") {
+                        $.each(v.filter7, function(i, v) {
+                            eventsListFilterDots.push({
+                                "filter": "f7",
+                                "name": v
+                            });
+                        });
+                    } else {
+                        $.each(v.filter7, function(i, v) {
+                            eventsListFilterTexts.push(v);
+                        });
+                    }
+                }
+            }
+            if (v.filter8) {
+                $.each(v.filter8, function(i, v) {
+                    filterClasses.push(v.replace(/\s/g, "-").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "-").toLowerCase());
+                });
+                if (filter8EventsList != "No") {
+                    if (filter8EventsList == "dots") {
+                        $.each(v.filter8, function(i, v) {
+                            eventsListFilterDots.push({
+                                "filter": "f8",
+                                "name": v
+                            });
+                        });
+                    } else {
+                        $.each(v.filter8, function(i, v) {
+                            eventsListFilterTexts.push(v);
+                        });
+                    }
+                }
+            }
+            if (v.filter9) {
+                $.each(v.filter9, function(i, v) {
+                    filterClasses.push(v.replace(/\s/g, "-").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "-").toLowerCase());
+                });
+                if (filter9EventsList != "No") {
+                    if (filter9EventsList == "dots") {
+                        $.each(v.filter9, function(i, v) {
+                            eventsListFilterDots.push({
+                                "filter": "f9",
+                                "name": v
+                            });
+                        });
+                    } else {
+                        $.each(v.filter9, function(i, v) {
+                            eventsListFilterTexts.push(v);
+                        });
+                    }
+                }
+            }
+            if (v.filter10) {
+                $.each(v.filter10, function(i, v) {
+                    filterClasses.push(v.replace(/\s/g, "-").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "-").toLowerCase());
+                });
+                if (filter10EventsList != "No") {
+                    if (filter10EventsList == "dots") {
+                        $.each(v.filter10, function(i, v) {
+                            eventsListFilterDots.push({
+                                "filter": "f10",
+                                "name": v
+                            });
+                        });
+                    } else {
+                        $.each(v.filter10, function(i, v) {
+                            eventsListFilterTexts.push(v);
+                        });
+                    }
+                }
+            }
+            eventItem = '';
+            eventItem += '<div class="row event filter-match ' + filterClasses.join(' ') + '">';
+            eventItem += '<a href="' + v.url + '" target="_parent">';
+            eventItem += '<div class="col-xs-12 col-sm-4 image">';
+            eventItem += imageOutput(v.image, v.startDate);
+            eventItem += '</div>';
+            eventItem += '<div class="col-xs-12 col-sm-8"><div class="event-details"><div>';
+            eventItem += '<h3 class="title">';
+            eventItem += v.title;
+            eventItem += '</h3>';
+            eventItem += '<div class="details">';
+            if (v.featured === "true") {
+                eventItem += '<div class="featured">';
+                eventItem += '<span class="far fa-star" aria-hidden="true"></span>';
+                eventItem += '</div>';
+            }
+            if (v.recurringEvent === "true") {
+                eventItem += '<div class="recurrence">';
+                eventItem += '<span class="fas fa-sync-alt" title="' + v.tooltip + '" data-toggle="tooltip" data-placement="bottom" tabindex="0">';
+                eventItem += '</span>';
+                eventItem += '</div>';
+            }
+
+            eventItem += '<div class="time">' + timeOutput(v.startDate, v.endDate, v.allDay, v.originalStart) + '</div>';
+            eventItem += '<div class="date">' + dateOutput(v.startDate, v.endDate) + '</div>';
+            if (eventsListFilterTexts.length > 0) {
+                if (eventsListFilterTexts.length > 1) {
+                    eventItem += '<div class="location listFilterText">' + eventsListFilterTexts.join(', ') + '</div>';
+                } else {
+                    eventItem += '<div class="location listFilterText">' + eventsListFilterTexts.join('') + '</div>';
+                }
+            }
+            if (eventsListFilterDots.length > 0) {
+                eventItem += '<div class="categories listFilterDots">';
+                $.each(eventsListFilterDots, function(i, v) {
+                    eventItem += '<span class="fas fa-circle dot ' + v.filter + "-" + v.name.replace(/\s/g, "-").replace(/,/g, "").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "").toLowerCase() + '-color" title="' + v.name + '" data-toggle="tooltip" data-placement="bottom" tabindex="0"></span>';
+                });
+                eventItem += '</div>';
+            }
+            eventItem += '</div>';
+             if(v.description != undefined){
+                eventItem += '<p class="summary">' + v.description + '</p>';
+            }
+            eventItem += '</div></div></div>';
+            eventItem += '</a>';
+            eventItem += '</div>';
+            eventList += eventItem;
+            if (showLimit != "all") {
+                return i < (showLimit - 1);
+            }
+        });
+        resolve({
+            data: data,
+            events: eventList
+        });
+    })
+}
+
+/* filters */
+$(".loadFilter:checkbox").change(function(e) {
+    if (e.originalEvent !== undefined) {
+        if (debugMode) {
+            console.log("------------------------");
+            console.log("applyFilter: " + $(this).val());
+        }
+        var thisChecked = $(this).val().replace(/\s/g, "-").replace(/,/g, "").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "").toLowerCase();
+        var hashChecked = $(this).data('hash') + "=";;
+        loadView(currentLoadedView, "", "all", "filter").then(function(results) {
+            showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+            if (window.location.hash) {
+                if (!_.includes(window.location.hash, hashChecked)) {
+                    if (debugMode) {
+                        console.log("filter add: " + hashChecked + thisChecked);
+                    }
+                    getHash(window.location.hash, hashChecked, function() {
+                        setHash(hashChecked, "add", thisChecked, function() {
+                            showFilter(setFiltersLoad, "loadView 1")
+                        });
+                    });
+                } else if (_.includes(window.location.hash, hashChecked)) {
+                    if (_.includes(window.location.hash, thisChecked)) {
+                        if (debugMode) {
+                            console.log("filter remove: " + thisChecked + " from " + hashChecked);
+                        }
+                        getHash(window.location.hash, hashChecked, function() {
+                            setHash(hashChecked, "remove", thisChecked, function() {
+                                showFilter(setFiltersLoad, "loadView 3")
+                            });
+                        });
+                    } else {
+                        if (debugMode) {
+                            console.log("filter add: " + thisChecked + " to " + hashChecked);
+                        }
+                        getHash(window.location.hash, hashChecked, function() {
+                            setHash(hashChecked, "add", thisChecked, function() {
+                                showFilter(setFiltersLoad, "loadView 2")
+                            });
+                        });
+                    }
+                }
+            } else {
+                if (debugMode) {
+                    console.log("filter add: " + hashChecked + thisChecked);
+                }
+                getHash(window.location.hash, hashChecked, function() {
+                    setHash(hashChecked, "add", thisChecked, function() {
+                        showFilter(setFiltersLoad, "loadView 1")
+                    });
+                });
+            }
+        });
+
+    }
+});
+
+$("select.loadFilter").change(function(e) {
+    if (e.originalEvent !== undefined) {
+        if (debugMode) {
+            console.log("------------------------");
+            console.log("applyFilter: " + $(this).val());
+        }
+        var thisSelected = $(this).val().replace(/\s/g, "-").replace(/,/g, "").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "").toLowerCase();
+        var selectedHash = $(this).data('hash') + "=";
+        loadView(currentLoadedView, "", "all", "filter").then(function(results) {
+            showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+            if (_.includes(window.location.hash, selectedHash)) {
+                if (debugMode) {
+                    console.log("filter replace " + selectedHash + thisSelected);
+                }
+                getHash(window.location.hash, selectedHash, function() {
+                    setHash(selectedHash, "replace", thisSelected, function() {
+                        showFilter(setFiltersLoad, "select.loadFilter");
+                    });
+                });
+            } else {
+                if (debugMode) {
+                    console.log("filter add " + selectedHash + thisSelected);
+                }
+                getHash(window.location.hash, selectedHash, function() {
+                    setHash(selectedHash, "add", thisSelected, function() {
+                        showFilter(setFiltersLoad, "select.loadFilter 2");
+                    });
+                });
+            }
+        });
+
+    };
+});
+
+$("#search").on("keyup change", function(e) {
+    loadView(currentLoadedView, "", "all", "searchText").then(function(results) {
+        showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+        searchText($("#search").val().toLowerCase());
+    });
+
+});
+
+$("#search").on("keydown", function(e) {
+    if (e.keyCode == 8) {
+        loadView(currentLoadedView, "", "all", "searchText").then(function(results) {
+            showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+        });
+    }
+});
+
+function searchText(textSearch) {
+    if (debugMode) {
+        console.log("searchText");
+    }
+    if ((textSearch.length) > 0) {
+        $(eventsContainer).find('.filter-match').each(function(e) {
+            if ((!$(this).find('.title').text().toLowerCase().match(textSearch) && !$(this).find('.details').text().toLowerCase().match(textSearch) && !$(this).find('.summary').text().toLowerCase().match(textSearch))) {
+                $(this).removeClass("filter-match");
+            }
+        });
+        eventCount();
+    } else {
+        $(eventsContainer).find('.filter-match').each(function(e) {
+            $(eventsContainer).find('.row.event').addClass("filter-match");
+        });
+    }
+}
+
+function showFilter(filter, origin) {
+    if (debugMode) {
+        console.log("showFilter");
+        console.log("filter: " + filter);
+        console.log("origin: " + origin);
+    }
+    if (filter.length > 1) {
+        $(eventsContainer).find('.row.event').removeClass("filter-match");
+        $(eventsContainer).find(filter).addClass("filter-match");
+        eventCount();
+        checkFilter(filter);
+    } else {
+        $(eventsContainer).find('.row.event').addClass("filter-match");
+        eventCount();
+    }
+}
+
+function checkFilter(filter) {
+    if (debugMode) {
+        console.log("check filter");
+    }
+    checkFilters = filter.replace(/, /g, '');
+    checkFilters = checkFilters.split(".");
+    checkFilters = _.compact(checkFilters);
+    $.each(checkFilters, function(i, checkFiltersValue) {
+        $(".loadFilter:checkbox[value=" + checkFiltersValue + "]").prop("checked", "true");
+    });
+    $.each(checkFilters, function(i, checkFiltersValue) {
+        $("select.loadFilter").each(function(i) {
+            var thisSelect = $(this);
+            var selectOptions = thisSelect.find('option');
+            selectOptions.each(function(i) {
+                if (checkFiltersValue === $(this).val()) {
+                    thisSelect.val(checkFiltersValue).change();
+                }
+            });
+        });
+    });
+}
+
+/* hash */
+function newHashF(newHash) {
+    if (newHash !== window.location.hash) {
+        removeHash();
+        history.pushState(null, document.title, window.location.pathname + newHash);
+    }
+}
+
+function getHash(hash, type, callback) {
+    vHashes = [];
+    f1Hashes = [];
+    f2Hashes = [];
+    f3Hashes = [];
+    f4Hashes = [];
+    f5Hashes = [];
+    f6Hashes = [];
+    f7Hashes = [];
+    f8Hashes = [];
+    f9Hashes = [];
+    f10Hashes = [];
+    if (hash) {
+        getHashArray = hash + "&";
+        getHashArray = getHashArray.replace("#", "").split("&");
+        getHashArray = _.compact(getHashArray);
+        $.each(getHashArray, function(i, getHashArrayValue) {
+            if (_.includes(getHashArrayValue, "v=")) {
+                vHashes.push(getHashArrayValue);
+            } else if (_.includes(getHashArrayValue, "f1=")) {
+                f1Hashes.push(getHashArrayValue);
+            } else if (_.includes(getHashArrayValue, "f2=")) {
+                f2Hashes.push(getHashArrayValue);
+            } else if (_.includes(getHashArrayValue, "f3=")) {
+                f3Hashes.push(getHashArrayValue);
+            } else if (_.includes(getHashArrayValue, "f4=")) {
+                f4Hashes.push(getHashArrayValue);
+            } else if (_.includes(getHashArrayValue, "f5=")) {
+                f5Hashes.push(getHashArrayValue);
+            } else if (_.includes(getHashArrayValue, "f6=")) {
+                f6Hashes.push(getHashArrayValue);
+            } else if (_.includes(getHashArrayValue, "f7=")) {
+                f7Hashes.push(getHashArrayValue);
+            } else if (_.includes(getHashArrayValue, "f8=")) {
+                f8Hashes.push(getHashArrayValue);
+            } else if (_.includes(getHashArrayValue, "f9=")) {
+                f9Hashes.push(getHashArrayValue);
+            } else if (_.includes(getHashArrayValue, "f10=")) {
+                f10Hashes.push(getHashArrayValue);
+            }
+        });
+    }
+    if (callback) {
+        callback();
+    }
+}
+
+function setHash(type, action, value, callback) {
+    setViews = "";
+    setViewsLoad = "";
+    setFilters = "";
+    setFiltersClean = "";
+    setFiltersMerged = "";
+    setFiltersLoad = "";
+    if (type === "v=") {
+        vHashes = [];
+        vHashes.push(type + value);
+    } else if (type === "f1=") {
+        if (_.includes(f1Hashes.toString(), type)) {
+            if (action === "add") {
+                f1HashesString = f1Hashes.toString() + "," + value;
+                f1Hashes = [];
+                f1Hashes.push(f1HashesString);
+            } else if (action === "remove") {
+                f1HashesString = f1Hashes.toString().replace("," + value, "").replace(value + ",", "").replace(value, "");
+                f1Hashes = [];
+                if (f1HashesString != "f1=") {
+                    f1Hashes.push(f1HashesString);
+                }
+            } else if (action === "replace") {
+                f1Hashes = [];
+                f1HashesString = type + value;
+                if (f1HashesString != "f1=") {
+                    f1Hashes.push(f1HashesString);
+                }
+            }
+        } else {
+            f3Hashes.push(type + value);
+        }
+    } else if (type === "f2=") {
+        if (_.includes(f2Hashes.toString(), type)) {
+            if (action === "add") {
+                f2HashesString = f2Hashes.toString() + "," + value;
+                f2Hashes = [];
+                f2Hashes.push(f2HashesString);
+            } else if (action === "remove") {
+                f2HashesString = f2Hashes.toString().replace("," + value, "").replace(value + ",", "").replace(value, "");
+                f2Hashes = [];
+                if (f2HashesString != "f2=") {
+                    f2Hashes.push(f2HashesString);
+                }
+            } else if (action === "replace") {
+                f2Hashes = [];
+                f2HashesString = type + value;
+                if (f2HashesString != "f2=") {
+                    f2Hashes.push(f2HashesString);
+                }
+            }
+        } else {
+            f3Hashes.push(type + value);
+        }
+    } else if (type === "f3=") {
+        if (_.includes(f3Hashes.toString(), type)) {
+            if (action === "add") {
+                f3HashesString = f3Hashes.toString() + "," + value;
+                f3Hashes = [];
+                f3Hashes.push(f3HashesString);
+            } else if (action === "remove") {
+                f3HashesString = f3Hashes.toString().replace("," + value, "").replace(value + ",", "").replace(value, "");
+                f3Hashes = [];
+                if (f3HashesString != "f3=") {
+                    f3Hashes.push(f3HashesString);
+                }
+            } else if (action === "replace") {
+                f3Hashes = [];
+                f3HashesString = type + value;
+                if (f3HashesString != "f3=") {
+                    f3Hashes.push(f3HashesString);
+                }
+            }
+        } else {
+            f3Hashes.push(type + value);
+        }
+    } else if (type === "f4=") {
+        if (_.includes(f4Hashes.toString(), type)) {
+            if (action === "add") {
+                f4HashesString = f4Hashes.toString() + "," + value;
+                f4Hashes = [];
+                f4Hashes.push(f4HashesString);
+            } else if (action === "remove") {
+                f4HashesString = f4Hashes.toString().replace("," + value, "").replace(value + ",", "").replace(value, "");
+                f4Hashes = [];
+                if (f4HashesString != "f4=") {
+                    f4Hashes.push(f4HashesString);
+                }
+            } else if (action === "replace") {
+                f4Hashes = [];
+                f4HashesString = type + value;
+                if (f4HashesString != "f4=") {
+                    f4Hashes.push(f4HashesString);
+                }
+            }
+        } else {
+            f4Hashes.push(type + value);
+        }
+    } else if (type === "f5=") {
+        if (_.includes(f5Hashes.toString(), type)) {
+            if (action === "add") {
+                f5HashesString = f5Hashes.toString() + "," + value;
+                f5Hashes = [];
+                f5Hashes.push(f5HashesString);
+            } else if (action === "remove") {
+                f5HashesString = f5Hashes.toString().replace("," + value, "").replace(value + ",", "").replace(value, "");
+                f5Hashes = [];
+                if (f5HashesString != "f5=") {
+                    f5Hashes.push(f5HashesString);
+                }
+            } else if (action === "replace") {
+                f5Hashes = [];
+                f5HashesString = type + value;
+                if (f5HashesString != "f5=") {
+                    f5Hashes.push(f5HashesString);
+                }
+            }
+        } else {
+            f3Hashes.push(type + value);
+        }
+    } else if (type === "f6=") {
+        if (_.includes(f6Hashes.toString(), type)) {
+            if (action === "add") {
+                f6HashesString = f6Hashes.toString() + "," + value;
+                f6Hashes = [];
+                f6Hashes.push(f6HashesString);
+            } else if (action === "remove") {
+                f6HashesString = f6Hashes.toString().replace("," + value, "").replace(value + ",", "").replace(value, "");
+                f6Hashes = [];
+                if (f6HashesString != "f6=") {
+                    f6Hashes.push(f6HashesString);
+                }
+            } else if (action === "replace") {
+                f6Hashes = [];
+                f6HashesString = type + value;
+                if (f6HashesString != "f6=") {
+                    f6Hashes.push(f6HashesString);
+                }
+            }
+        } else {
+            f3Hashes.push(type + value);
+        }
+    } else if (type === "f7=") {
+        if (_.includes(f7Hashes.toString(), type)) {
+            if (action === "add") {
+                f7HashesString = f7Hashes.toString() + "," + value;
+                f7Hashes = [];
+                f7Hashes.push(f7HashesString);
+            } else if (action === "remove") {
+                f7HashesString = f7Hashes.toString().replace("," + value, "").replace(value + ",", "").replace(value, "");
+                f7Hashes = [];
+                if (f7HashesString != "f7=") {
+                    f7Hashes.push(f7HashesString);
+                }
+            } else if (action === "replace") {
+                f7Hashes = [];
+                f7HashesString = type + value;
+                if (f7HashesString != "f7=") {
+                    f7Hashes.push(f7HashesString);
+                }
+            }
+        } else {
+            f3Hashes.push(type + value);
+        }
+    } else if (type === "f8=") {
+        if (_.includes(f8Hashes.toString(), type)) {
+            if (action === "add") {
+                f8HashesString = f8Hashes.toString() + "," + value;
+                f8Hashes = [];
+                f8Hashes.push(f8HashesString);
+            } else if (action === "remove") {
+                f8HashesString = f8Hashes.toString().replace("," + value, "").replace(value + ",", "").replace(value, "");
+                f8Hashes = [];
+                if (f8HashesString != "f8=") {
+                    f8Hashes.push(f8HashesString);
+                }
+            } else if (action === "replace") {
+                f8Hashes = [];
+                f8HashesString = type + value;
+                if (f8HashesString != "f8=") {
+                    f8Hashes.push(f8HashesString);
+                }
+            }
+        } else {
+            f3Hashes.push(type + value);
+        }
+    } else if (type === "f9=") {
+        if (_.includes(f9Hashes.toString(), type)) {
+            if (action === "add") {
+                f9HashesString = f9Hashes.toString() + "," + value;
+                f9Hashes = [];
+                f9Hashes.push(f9HashesString);
+            } else if (action === "remove") {
+                f9HashesString = f9Hashes.toString().replace("," + value, "").replace(value + ",", "").replace(value, "");
+                f9Hashes = [];
+                if (f9HashesString != "f9=") {
+                    f9Hashes.push(f9HashesString);
+                }
+            } else if (action === "replace") {
+                f9Hashes = [];
+                f9HashesString = type + value;
+                if (f9HashesString != "f9=") {
+                    f9Hashes.push(f9HashesString);
+                }
+            }
+        } else {
+            f3Hashes.push(type + value);
+        }
+    } else if (type === "f10=") {
+        if (_.includes(f10Hashes.toString(), type)) {
+            if (action === "add") {
+                f10HashesString = f10Hashes.toString() + "," + value;
+                f10Hashes = [];
+                f10Hashes.push(f10HashesString);
+            } else if (action === "remove") {
+                f10HashesString = f10Hashes.toString().replace("," + value, "").replace(value + ",", "").replace(value, "");
+                f10Hashes = [];
+                if (f10HashesString != "f10=") {
+                    f10Hashes.push(f10HashesString);
+                }
+            } else if (action === "replace") {
+                f10Hashes = [];
+                f10HashesString = type + value;
+                if (f10HashesString != "f10=") {
+                    f10Hashes.push(f10HashesString);
+                }
+            }
+        } else {
+            f3Hashes.push(type + value);
+        }
+    }
+    setViews = vHashes.join();
+    setViewsLoad = setViews.replace("v=", "");
+    setFiltersMerged = "";
+    setFilters = _.concat(f1Hashes, f2Hashes, f3Hashes, f4Hashes, f5Hashes, f6Hashes, f7Hashes, f8Hashes, f9Hashes, f10Hashes);
+    setFiltersClean = _.compact(setFilters);
+    setFiltersMerged = "&" + setFiltersClean.join("&");
+    setFiltersLoad = setFiltersMerged;
+    $.each(urlHashes, function(i, urlHashesValue) {
+        setFiltersLoad = setFiltersLoad.replace(urlHashesValue, "");
+    });
+    setFiltersLoad = setFiltersLoad.substring(1);
+    setFiltersLoad = "."+setFiltersLoad;
+    setFiltersLoad = setFiltersLoad.replace(/&/g, filterLogic).replace(/=/g, ".").replace(/,/g, filterLogic).replace(/\.\./g, ".").replace(/\. \./g, ".");
+        if (debugMode) {
+            console.log("------------------------");
+            console.log({setViews});
+            console.log({setViewsLoad});
+            console.log({setFilters});
+            console.log({setFiltersClean});
+            console.log({setFiltersMerged});
+            console.log({urlHashes});
+            console.log({setFiltersLoad});
+        }
+    
+    if (setFiltersLoad === ".") {
+        setFiltersLoad = "";
+    }
+    if (setFiltersClean.length > 0) {
+        if (setViews.length > 0) {
+            setURLHash = "#" + setViews + setFiltersMerged;
+        } else {
+            setURLHash = "#" + setFiltersMerged.substring(1);
+        }
+    } else {
+        setURLHash = "#" + setViews
+    }
+    if (setURLHash === "#") {
+        newHashF("");
+    } else {
+        newHashF(setURLHash);
+    }
+    if (callback) {
+        callback();
+    }
+}
+
+function removeHash(callback) {
+    history.pushState("", document.title, window.location.pathname + window.location.search);
+    if (callback) {
+        callback();
+    }
+}
+
+/* recurring */
+function calculateRecurrences(data) {
+    if (debugMode) {
+        console.log({
+            "recurDataIn": data
+        });
+    }
+    return new Promise(function(resolve, reject) {
+        var recurringData = [];
+        var daysArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        var fullDayArray = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        $.each(data, function(i, event) {
+            if (event.recurringEvent === "true") {
+                console.log(event.title);
+                /* Get the date data */
+                var startMoment = moment.parseZone(event.startDate);
+                var _startMoment = startMoment.clone();
+                var endMoment = moment.parseZone(event.endDate);
+                var difference = endMoment.diff(startMoment);
+                var untilMoment = moment.parseZone(event.recurringDetails.recurUntilDate);
+                /* Get cancellations of recurring event */
+                var cancellations = event.recurringDetails.recurCancellations;
+                $.each(cancellations, function(i, date) {
+                    cancellations[i] = moment.parseZone(date);
+                });
+                /* Calculate the recurring events */
+                if (event.recurringDetails.recurFrequency === "daily") {
+                    if (event.recurringDetails.recurInterval > 1) {
+                        event.tooltip = "Every " + event.recurringDetails.recurInterval + " days";
+                    } else {
+                        event.tooltip = "Daily";
+                    }
+                    while (untilMoment.diff(startMoment, "s") >= 0) { /* Add the current event */
+                        var thisRecurrence = $.extend({}, event);
+                        thisRecurrence.startDate = startMoment.valueOf();
+                        thisRecurrence.endDate = endMoment.valueOf();
+                        if (!checkCancellations(cancellations, thisRecurrence.startDate)) {
+                            recurringData.push(thisRecurrence);
+                        }
+                        /* Increment by X days */
+                        startMoment.add(event.recurringDetails.recurInterval, "days").valueOf();
+                        endMoment.add(event.recurringDetails.recurInterval, "days").valueOf();
+                    }
+                } else if (event.recurringDetails.recurFrequency === "weekly") {
+                    if (event.recurringDetails.recurInterval > 1) {
+                        event.tooltip = "Every " + event.recurringDetails.recurInterval + " weeks";
+                    } else {
+                        event.tooltip = "Weekly";
+                    }
+                    if (event.recurringDetails.recurDays != undefined && event.recurringDetails.recurDays.length > 0) {
+                        event.tooltip += " on ";
+                        for (var day = 0; day < event.recurringDetails.recurDays.length; day++) {
+                            event.tooltip += event.recurringDetails.recurDays[day];
+                            if (day < event.recurringDetails.recurDays.length - 2) {
+                                event.tooltip += ", ";
+                            }
+                            if (day == event.recurringDetails.recurDays.length - 2) {
+                                event.tooltip += " & ";
+                            }
+                        }
+                        while (untilMoment.diff(startMoment, "s") >= 0) { /* Loop over the selected days of the week */
+                            for (var day = 0; day < event.recurringDetails.recurDays.length; day++) {
+                                var thisDay = event.recurringDetails.recurDays[day];
+                                startMoment.date(startMoment.date() + (daysArray.indexOf(thisDay) - startMoment.day()));
+                                endMoment = startMoment.clone().add(difference, "ms"); /* Only add occurrences that are after the actual start date */
+                                if (startMoment.diff(_startMoment, "s") >= 0) {
+                                    var thisRecurrence = $.extend({}, event);
+                                    thisRecurrence.startDate = startMoment.valueOf();
+                                    thisRecurrence.endDate = endMoment.valueOf();
+                                    if (!checkCancellations(cancellations, thisRecurrence.startDate)) {
+                                        recurringData.push(thisRecurrence);
+                                    }
+                                }
+                            } /* Increment by X weeks */
+                            startMoment.add(event.recurringDetails.recurInterval, "weeks");
+                            endMoment.add(event.recurringDetails.recurInterval, "weeks");
+                        }
+                    } else {
+                        while (untilMoment.diff(startMoment, "s") >= 0) { /* Add the current event */
+                            var thisRecurrence = $.extend({}, event);
+                            thisRecurrence.startDate = startMoment.valueOf();
+                            thisRecurrence.endDate = endMoment.valueOf();
+                            if (!checkCancellations(cancellations, thisRecurrence.startDate)) {
+                                recurringData.push(thisRecurrence);
+                            }
+                            /* Increment by X weeks */
+                            startMoment.add(event.recurringDetails.recurInterval, "weeks").valueOf();
+                            endMoment.add(event.recurringDetails.recurInterval, "weeks").valueOf();
+                        }
+                    }
+                } else if (event.recurringDetails.recurFrequency === "monthly") {
+                    if (event.recurringDetails.recurInterval > 1) {
+                        event.tooltip = "Every " + event.recurringDetails.recurInterval + " months";
+                    } else {
+                        event.tooltip = "Monthly";
+                    }
+                    if (event.recurringDetails.recurMonth === "day of the month") { /* The same day of the month on each month (1st, 2nd, etc) */
+                        event.tooltip += " on the " + startMoment.format('Do') + " day";
+                        while (untilMoment.diff(startMoment, "s") >= 0) { /* Ensure the date exists within the current month */
+                            if (startMoment.date() == _startMoment.date()) {
+                                var thisRecurrence = $.extend({}, event);
+                                thisRecurrence.startDate = startMoment.valueOf();
+                                thisRecurrence.endDate = endMoment.valueOf();
+                                if (!checkCancellations(cancellations, thisRecurrence.startDate)) {
+                                    recurringData.push(thisRecurrence);
+                                }
+                            } /* Increment by X months */
+                            startMoment.add(event.recurringDetails.recurInterval, "months");
+                            if (startMoment.daysInMonth() >= _startMoment.date()) {
+                                startMoment.date(_startMoment.date());
+                            }
+                            endMoment = startMoment.clone().add(difference, "ms");
+                        }
+                    } else if (event.recurringDetails.recurMonth === "day of the week") { /* The same day of the week of the month (2nd Tues of month) */
+                        event.tooltip += " on the " + nth(Math.ceil(startMoment.date() / 7)) + " " + fullDayArray[startMoment.day()]; /* Add a monthly occurrence based on the original event's day of the week */ /* Determine the position of this day in the month (ie 1st, 2nd ...) */
+                        var theWeek = Math.floor(startMoment.date() / 7),
+                            theDay = startMoment.day() + 1,
+                            tempMonth = startMoment.month();
+                        while (untilMoment.diff(startMoment, "s") >= 0) { /* If we didn't roll over into the next month, add the event */
+                            if (tempMonth === startMoment.month()) {
+                                var thisRecurrence = $.extend({}, event);
+                                thisRecurrence.startDate = startMoment.valueOf();
+                                thisRecurrence.endDate = endMoment.valueOf();
+                                if (!checkCancellations(cancellations, thisRecurrence.startDate)) {
+                                    recurringData.push(thisRecurrence);
+                                }
+                            } /* Figure out where the next month's first day lies and add the difference in days with the weekly position */
+                            startMoment.add(event.recurringDetails.recurInterval, "months").date(1);
+                            tempMonth = startMoment.month();
+                            if (theDay <= startMoment.day()) {
+                                startMoment.date((theDay - startMoment.day() + ((theWeek + 1) * 7)));
+                            } else {
+                                startMoment.date((theDay - startMoment.day() + (theWeek * 7)));
+                            }
+                            endMoment = startMoment.clone().add(difference, "ms");
+                        }
+                    }
+                } else if (event.recurringDetails.recurFrequency === "yearly") {
+                    if (event.recurringDetails.recurInterval > 1) {
+                        event.tooltip = "Every " + event.recurringDetails.recurInterval + " years";
+                    } else {
+                        event.tooltip = "Yearly";
+                    }
+                    while (untilMoment.diff(startMoment, "s") >= 0) { /* Add the current event */
+                        var thisRecurrence = $.extend({}, event);
+                        thisRecurrence.startDate = startMoment.valueOf();
+                        thisRecurrence.endDate = endMoment.valueOf();
+                        if (!checkCancellations(cancellations, thisRecurrence.startDate)) {
+                            recurringData.push(thisRecurrence);
+                          }
+                        /* Increment by X years */
+                        startMoment.add(event.recurringDetails.recurInterval, "years").valueOf();
+                        endMoment.add(event.recurringDetails.recurInterval, "years").valueOf();
+                    }
+                }
+            }
+        });
+        if (debugMode) {
+            console.log({
+                "recurDataOut": recurringData
+            });
+        }
+        resolve(recurringData);
+    })
+}
+
+function checkCancellations(cancellations, checkDate) {
+    var cancelled = false;
+    if (cancellations.length > 0) {
+        $.each(cancellations, function(i, date) {
+            cancelled = moment.parseZone(checkDate).isSame(date, 'day');
+            if (cancelled) {
+                return false;
+            }
+        });
+    }
+    return cancelled;
+}
+
+function nth(n) {
+    return n + ["st", "nd", "rd"][((n + 90) % 100 - 10) % 10 - 1] || "th"
+}
+
+function recurringURLs(view) {
+    if (debugMode) {
+        console.log("recurringData");
+    }
+    return new Promise(function(resolve, reject) {
+        viewChecker(view).then(function(results) {
+            resolve(results);
+        });
+    })
+}
+
+/* view */
+$(".loadView").on("click", function() {
+    if (debugMode) {
+        console.log("------------------------");
+        console.log("clicked: " + $(this).text());
+    }
+    $(this).blur();
+    $('.input-daterange input').datepicker('update', null);
+    $('.input-daterange').datepicker('updateDates');
+    clickedView = $(this).text().replace(/All /gi, "").replace(/ Events/gi, "").replace(/\s/g, "-").replace(/,/g, "").replace(/&/g, "and").replace(/[^0-9a-z\-]/gi, "").toLowerCase();
+    getHash(window.location.hash, "", function() {
+        setHash("v=", "replace", clickedView, function() {
+            loadView(clickedView).then(function(results) {
+                showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+            });
+        });
+    });
+});
+
+function loadView(view, target, showLimit, origin) {
+    return new Promise(function(resolve, reject) {
+        if (debugMode) {
+            console.log("loadView: " + view);
+        }
+        if (target === undefined || target == "") {
+            target = eventsContainer;
+        }
+        if (showLimit === undefined || showLimit == "") {
+            showLimit = defaultViewCount;
+        }
+        if (view != "side-featured-events") {
+            currentLoadedView = view;
+        }
+        eventList = "";
+        currentDataURLs = [];
+        viewChecker(view).then(function(results) {
+            if (view === "upcoming-events") {
+                $(eventViewHeader).html("Upcoming Events");
+                // 			checkDataURLs(results, view, target, showLimit, origin);
+                checkDataURLs(results, view, target, showLimit, origin).then(function(results) {
+                    // showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+                    resolve({
+                        "events": results.events,
+                        "view": results.view,
+                        "target": results.target,
+                        "showLimit": results.showLimit,
+                        "origin": results.origin
+                    });
+                });
+            } else if (view === "this-month") {
+                $(eventViewHeader).html("This Month's Events");
+                checkDataURLs(results, view, target, "all").then(function(results) {
+                    resolve({
+                        "events": results.events,
+                        "view": results.view,
+                        "target": results.target,
+                        "showLimit": results.showLimit,
+                        "origin": results.origin
+                    });
+                });
+            } else if (view === "today") {
+                $(eventViewHeader).html("Today's Events");
+                checkDataURLs(results, view, target, "all").then(function(results) {
+                    resolve({
+                        "events": results.events,
+                        "view": results.view,
+                        "target": results.target,
+                        "showLimit": results.showLimit,
+                        "origin": results.origin
+                    });
+                });
+            } else if (view === "tomorrow") {
+                $(eventViewHeader).html("Tomorrow's Events");
+                checkDataURLs(results, view, target, "all").then(function(results) {
+                    resolve({
+                        "events": results.events,
+                        "view": results.view,
+                        "target": results.target,
+                        "showLimit": results.showLimit,
+                        "origin": results.origin
+                    });
+                });
+            } else if (view === "this-week") {
+                $(eventViewHeader).html("This Week's Events");
+                checkDataURLs(results, view, target, "all").then(function(results) {
+                    resolve({
+                        "events": results.events,
+                        "view": results.view,
+                        "target": results.target,
+                        "showLimit": results.showLimit,
+                        "origin": results.origin
+                    });
+                });
+            } else if (view === "this-weekend") {
+                $(eventViewHeader).html("This Weekend's Events");
+                checkDataURLs(results, view, target, "all").then(function(results) {
+                    resolve({
+                        "events": results.events,
+                        "view": results.view,
+                        "target": results.target,
+                        "showLimit": results.showLimit,
+                        "origin": results.origin
+                    });
+                });
+            } else if (view === "next-week") {
+                $(eventViewHeader).html("Next Week's Events");
+                checkDataURLs(results, view, target, "all").then(function(results) {
+                    resolve({
+                        "events": results.events,
+                        "view": results.view,
+                        "target": results.target,
+                        "showLimit": results.showLimit,
+                        "origin": results.origin
+                    });
+                });
+            } else if (view === "this-month") {
+                $(eventViewHeader).html("This Month's Events");
+                checkDataURLs(results, view, target, "all").then(function(results) {
+                    resolve({
+                        "events": results.events,
+                        "view": results.view,
+                        "target": results.target,
+                        "showLimit": results.showLimit,
+                        "origin": results.origin
+                    });
+                });
+            } else if (view === "next-month") {
+                $(eventViewHeader).html("Next Month's Events");
+                checkDataURLs(results, view, target, "all").then(function(results) {
+                    resolve({
+                        "events": results.events,
+                        "view": results.view,
+                        "target": results.target,
+                        "showLimit": results.showLimit,
+                        "origin": results.origin
+                    });
+                });
+            } else if (view === "featured") {
+                $(eventViewHeader).html("Upcoming Featured Events");
+                checkDataURLs(results, view, target, showLimit, origin).then(function(results) {
+                    resolve({
+                        "events": results.events,
+                        "view": results.view,
+                        "target": results.target,
+                        "showLimit": results.showLimit,
+                        "origin": results.origin
+                    });
+                });
+            } else if (view === "side-featured-events") {
+                checkDataURLs(results, view, target, "3", origin).then(function(results) {
+                    resolve({
+                        "events": results.events,
+                        "view": results.view,
+                        "target": results.target,
+                        "showLimit": results.showLimit,
+                        "origin": results.origin
+                    });
+                });
+            } else {
+                $(eventViewHeader).html(view);
+                checkDataURLs(results, view, target, "all").then(function(results) {
+                    resolve({
+                        "events": results.events,
+                        "view": results.view,
+                        "target": results.target,
+                        "showLimit": results.showLimit,
+                        "origin": results.origin
+                    });
+                });
+            }
+        });
+    })
+}
+
+function viewChecker(view) {
+    return new Promise(function(resolve, reject) {
+        if (view === "upcoming-events" || view === "this-month" || view === "today" || view === "tomorrow" || view === "this-week" || view === "this-weekend" || view === "next-week" || view === "this-month" || view === "next-month" || view === "featured" || view === "side-featured-events") {
+            currentDataURLs.push(currentDataURL.replace(/&amp;/g, '&'));
+        } else {
+            if (view.indexOf("-") > -1) {
+                rangeDates = [];
+                rangeDateStart = "";
+                rangeDateEnd = "";
+                startYearRange = "";
+                endYearRange = "";
+                startMonthRange = "";
+                endMonthRange = "";
+                startDayRange = "";
+                endDayRange = "";
+                rangeDates = view.split("-");
+                rangeDateStart = rangeDates[0];
+                rangeDateEnd = rangeDates[1];
+                if (!moment(rangeDateStart, "MM/DD/YYYY", true).isValid() && !moment(rangeDateEnd, "MM/DD/YYYY", true).isValid()) {
+                    eventsMessage = rangeDateStart + "-" + rangeDateStart + " is not a valid date range.";
+                    errorMessage = true;
+                } else {
+                    if (!moment(rangeDateStart, "MM/DD/YYYY", true).isValid()) {
+                        eventsMessage = rangeDateStart + " is not a valid start date.";
+                        errorMessage = true;
+                    }
+                    if (!moment(rangeDateEnd, "MM/DD/YYYY", true).isValid()) {
+                        eventsMessage = rangeDateEnd + " is not a valid end date.";
+                        errorMessage = true;
+                    }
+                }
+                if (errorMessage) {
+                    $(eventsMessageContainer).empty();
+                    $(eventsMessageContainer).append('<p>' + eventsMessage + '</p>');
+                    $(eventsMessageContainer).show();
+                } else {
+                    $(eventsMessageContainer).hide();
+                    $(eventsMessageContainer).empty();
+                    startYearRange = moment(rangeDateStart, "MM/DD/YYYY").format('YYYY');
+                    endYearRange = moment(rangeDateEnd, "MM/DD/YYYY").format('YYYY');
+                    startMonthRange = moment(rangeDateStart, "MM/DD/YYYY").format('MM');
+                    endMonthRange = moment(rangeDateEnd, "MM/DD/YYYY").format('MM');
+                    startDayRange = moment(rangeDateStart, "MM/DD/YYYY").format('D');
+                    endDayRange = moment(rangeDateEnd, "MM/DD/YYYY").format('D');
+                    if (startYearRange == endYearRange) {
+                        if (startMonthRange == endMonthRange) {
+                            if (currentYear === startYearRange && startMonthRange >= previousMonth) {
+                                currentDataURLs.push(currentDataURL.replace(/&amp;/g, '&'));
+                            } else {
+                                dataFiles.forEach(function(dF) {
+                                    if (dF.name == startYearRange) {
+                                        currentDataURLs.push(dF.link.replace(/&amp;/g, '&'));
+                                    }
+                                });
+                            }
+                        } else {
+                            if (currentYear === startYearRange && startMonthRange >= previousMonth) {
+                                currentDataURLs.push(currentDataURL.replace(/&amp;/g, '&'));
+                            } else {
+                                dataFiles.forEach(function(dF) {
+                                    if (dF.name == startYearRange) {
+                                        currentDataURLs.push(dF.link.replace(/&amp;/g, '&'));
+                                    }
+                                });
+                            }
+                            if (currentYear === endYearRange && endMonthRange >= previousMonth) {
+                                currentDataURLs.push(currentDataURL.replace(/&amp;/g, '&'));
+                            } else {
+                                dataFiles.forEach(function(dF) {
+                                    if (dF.name == startYearRange) {
+                                        currentDataURLs.push(dF.link.replace(/&amp;/g, '&'));
+                                    }
+                                });
+                            }
+                        }
+                    } else {
+                        if (currentYear === startYearRange && startMonthRange >= previousMonth) {
+                            currentDataURLs.push(currentDataURL.replace(/&amp;/g, '&'));
+                        } else {
+                            for (i = startYearRange; i <= endYearRange; ++i) {
+                                dataFiles.forEach(function(dF) {
+                                    if (dF.name == i) {
+                                        currentDataURLs.push(dF.link.replace(/&amp;/g, '&'));
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            } else {
+                singleDateYear = "";
+                singleDateMonth = "";
+                singleDateDay = "";
+                singleDate = "";
+                if (!moment(view, "MM/DD/YYYY", true).isValid()) {
+                    errorMessage = true;
+                    eventsMessage = '"' + view + '"' + " is not a valid view.";
+                    $(eventsMessageContainer).empty();
+                    $(eventsMessageContainer).append(eventsMessage);
+                    $(eventsMessageContainer).show();
+                } else {
+                    $(eventsMessageContainer).hide();
+                    $(eventsMessageContainer).empty();
+                }
+                if (!errorMessage) {
+                    singleDate = moment(view, "MM/DD/YYYY").format('MM/DD/YYYY');
+                    singleDateYear = moment(view, "MM/DD/YYYY").format('YYYY');
+                    singleDateMonth = moment(view, "MM/DD/YYYY").format('MM');
+                    singleDateDay = moment(view, "MM/DD/YYYY").format('D');
+                    if (currentYear === singleDateYear && singleDateMonth >= previousMonth) {
+                        currentDataURLs.push(currentDataURL.replace(/&amp;/g, '&'));
+                    } else {
+                        dataFiles.forEach(function(dF) {
+                            if (dF.name == singleDateYear) {
+                                currentDataURLs.push(dF.link.replace(/&amp;/g, '&'));
+                            }
+                        });
+                    }
+                }
+            }
+        }
+        resolve(currentDataURLs);
+    })
+}
+
+/****/
+
+function awaitAll(list, asyncFn) {
+    const promises = [];
+    list.forEach(function(x) {
+        promises.push(asyncFn(x));
+    });
+    return Promise.all(promises);
+}
+
+function urlText(s, preserveCR) {
+    preserveCR = preserveCR ? '&#13;' : '\n';
+    return ('' + s).replace(/%/g, '%25').replace(/&amp;/g, '%26').replace(/&/g, '%26').replace(/'/g, '%27').replace(/"/g, '%22').replace(/</g, '%20').replace(/>/g, '%3E').replace(/#/g, '%23').replace(/ /g, '%20').replace(/\r\n/g, preserveCR).replace(/[\r\n]/g, preserveCR);
+}
+
+function saveLinkOutput(title, description, startDate, endDate, timezone, allDay, calendar) {
+    if (allDay == "true") {
+        var ssd = moment(startDate).format('YYYYMMDD');
+        var sed = moment(endDate).add(1, "days").format('YYYYMMDD');
+        if (calendar == "outlook") {
+            var ssd = moment(startDate).format('YYYY-MM-DD');
+            var sed = moment(endDate).add(1, "days").format('YYYY-MM-DD');
+        }
+    } else {
+        var ssd = moment(startDate).format('YYYYMMDDTHHmmZ');
+        var sed = moment(endDate).format('YYYYMMDDTHHmmZ');
+        if (calendar == "outlook") {
+            var ssd = moment(startDate).format('YYYY-MM-DDTHH:mmZ');
+            var sed = moment(endDate).add(1, "days").format('YYYY-MM-DDTHH:mmZ');
+        }
+    }
+    var saveLinkOutput = "";
+    if (calendar == "google") {
+        saveLinkOutput += "<a href='https://calendar.google.com/calendar/r/eventedit?text=" + urlText(title) + "&amp;dates=" + ssd + "/" + sed + "&amp;details=" + urlText(description) + " ' target='_blank'>";
+        saveLinkOutput += "<span class='fab fa-google' aria-hidden='true'></span> <span class='sr-only'>Add to</span>Google</a>";
+    } else if (calendar == "outlook") {
+        saveLinkOutput += "<a target='_blank' href='https://outlook.live.com/owa/?path=/calendar/action/compose&amp;startdt=" + ssd + "&amp;enddt=" + sed + "&amp;subject=" + urlText(title) + "&amp;body=" + urlText(description) + "&amp;allday=" + allDay + " ' target='_blank'>";
+        saveLinkOutput += "<span class='fab fa-windows' aria-hidden='true'></span> <span class='sr-only'>Add to</span>Outlook</a>";
+    } else if (calendar == "yahoo") {
+        if (allDay == "true") {
+            saveLinkOutput += "<a href='https://calendar.yahoo.com/?v=60&amp;view=d&amp;type=20&amp;title=" + urlText(title) + "&amp;st=" + ssd + "&amp;et=" + sed + "&amp;desc=" + urlText(description) + "&amp;dur=allday' target='_blank'>";
+        } else {
+            saveLinkOutput += "<a href='https://calendar.yahoo.com/?v=60&amp;view=d&amp;type=20&amp;title=" + urlText(title) + "&amp;st=" + ssd + "&amp;et=" + sed + "&amp;desc=" + urlText(description) + "' target='_blank'>";
+        }
+        saveLinkOutput += "<span class='fab fa-yahoo' aria-hidden='true'></span> <span class='sr-only'>Add to</span>Yahoo</a>";
+    } else if (calendar == "ics") {
+        saveLinkOutput += "<a href='" + thisCurrentEvent[0].ics + "' target='_blank'><span class='far fa-calendar-plus' aria-hidden='true'></span> <span class='sr-only'>Download as</span>iCal</a>";
+    }
+    return saveLinkOutput;
+}
+
+function currentRecurringEvent() {
+    calculateRecurrences(thisCurrentEvent).then(function(resultsR) {
+        eventDateChecker("", resultsR, "current-recurring-event").then(function(results) {
+            jsonToCurrentData(results).then(function(results) {
+                results.jsonToCurrentDataEvents.sort(function(a, b) {
+                    return +new Date(a.startDate) - +new Date(b.startDate);
+                });
+                if (results.jsonToCurrentDataEvents.length > 0) {
+                    $.each(results.jsonToCurrentDataEvents, function(i, v) {
+                        $('.rDate').append("Next Occurrance:<br/>" + dateOutput(v.startDate, v.endDate, "full"));
+                        $('#rDates').append('<option selected="selected" value="' + dateOutput(v.startDate, v.endDate, "full") + '" data-title="' + v.title + '" data-desc="' + v.description + '" data-start="' + v.startDate + '" data-end="' + v.endDate + '" data-timezone="' + thisCurrentEvent[0].timezone + '" data-allDay="' + v.allDay + '">' + dateOutput(v.startDate, v.endDate, "full") + '</option>');
+                        $(".save-row .feeds").append(saveLinkOutput(v.title, v.description, v.startDate, v.endDate, thisCurrentEvent[0].timezone, v.allDay, "google"));
+                        $(".save-row .feeds").append(saveLinkOutput(v.title, v.description, v.startDate, v.endDate, thisCurrentEvent[0].timezone, v.allDay, "outlook"));
+                        $(".save-row .feeds").append(saveLinkOutput(v.title, v.description, v.startDate, v.endDate, thisCurrentEvent[0].timezone, v.allDay, "yahoo"));
+                        $(".save-row .feeds").append(saveLinkOutput(v.title, v.description, v.startDate, v.endDate, thisCurrentEvent[0].timezone, v.allDay, "ics"));
+                        return false;
+                    });
+                    $.each(results.jsonToCurrentDataEvents, function(i, v) {
+                        if (i > 0) {
+                            $('#rDates').append('<option value="' + dateOutput(v.startDate, v.endDate, "full") + '" data-title="' + v.title + '" data-desc="' + v.description + '" data-start="' + v.startDate + '" data-end="' + v.endDate + '" data-timezone="' + thisCurrentEvent[0].timezone + '" data-allDay="' + v.allDay + '">' + dateOutput(v.startDate, v.endDate, "full") + '</option>');
+                        }
+                    });
+                } else {
+                    $('#rDates').remove();
+                    $('.save-row').remove();
+                    $('.rDate').append("This event has ended. It ran from<br/>" + moment(thisCurrentEvent[0].startDate).format('MMM D, YYYY') + " to " + moment(thisCurrentEvent[0].recurringDetails.recurUntilDate).format('MMM D, YYYY') + ".");
+                }
+            });
+        });
+    });
+}
+
+
+
+function checkHash() {
+    if (window.location.hash) {
+        loadView("side-featured-events", featuredEventsContainer, sideFeaturedCount).then(function(results) {
+            showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+            if (debugMode) {
+                console.log("------------------------");
+                console.log("pageLoadHash");
+            }
+            getHash(window.location.hash, "", function() {
+                setViews = vHashes.join();
+                setViewsLoad = setViews.replace("v=", "");
+                if (setViewsLoad.length < 1) {
+                    setViewsLoad = defaultView;
+                };
+                setFiltersMerged = "";
+                setFilters = _.concat(f1Hashes, f2Hashes, f3Hashes, f4Hashes, f5Hashes, f6Hashes, f7Hashes, f8Hashes, f9Hashes, f10Hashes);
+                setFiltersClean = _.compact(setFilters);
+                setFiltersMerged = "&" + setFiltersClean.join("&");
+                setFiltersLoad = setFiltersMerged;
+                $.each(urlHashes, function(i, urlHashesValue) {
+                    setFiltersLoad = setFiltersLoad.replace(urlHashesValue, "");
+                });
+                setFiltersLoad = setFiltersLoad.replace(/&/g, ".").replace(/=/g, ".").replace(/,/g, filterLogic).replace(/\.\./g, ".");
+                if (setFiltersLoad === ".") {
+                    setFiltersLoad = "";
+                }
+                loadView(setViewsLoad, "", "all", "pageLoad").then(function(results) {
+                    showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+                });
+            });
+        });
+    } else {
+        if (debugMode) {
+            console.log("pageLoad: " + defaultView);
+            console.log("------------------------");
+        }
+        loadView("side-featured-events", featuredEventsContainer, sideFeaturedCount).then(function(results) {
+            showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+            if (debugMode) {
+                console.log("------------------------");
+            }
+            loadView(defaultView, "", "", "pageLoad").then(function(results) {
+                showEvents(results.events, results.view, results.target, results.showLimit, results.origin);
+            });
+        });
+    }
+}
+
+function dateOutput(startDateIn, endDateIn, type) {
+    if (moment(startDateIn).isSame(endDateIn), 'day') {
+        if (type == "full") {
+            var dateOutput = moment(startDateIn).format('MMMM D, YYYY');
+        } else {
+            var dateOutput = moment(startDateIn).format('MMM D YYYY');
+        }
+    } else {
+        if (moment(startDateIn).isSame(endDateIn), 'year') {
+            if (moment(startDateIn).isSame(endDateIn), 'month') {
+                var dateOutput = moment(startDateIn).format('MMM D') + ' - ' + moment(endDateIn).format('D YYYY');
+            } else {
+                var dateOutput = moment(startDateIn).format('MMM D') + ' - ' + moment(endDateIn).format('MMM D YYYY');
+            }
+        } else {
+            var dateOutput = moment(startDateIn).format('MMM D YYYY') + ' - ' + moment(endDateIn).format('MMM D YYYY');
+        }
+    }
+    return dateOutput;
+}
+
+function imgWeekDay(day) {
+    var daysOfWeek = ["Mon<span>day</span>", "Tue<span>sday</span>", "Wed<span>nesday</span>", "Thur<span>sday</span>", "Fri<span>day</span>", "Sat<span>urday</span>", "Sun<span>day</span>"];
+    return daysOfWeek[day - 1];
+}
+
+function imageOutput(image, startDateIn) {
+    if (image) {
+        var imageOuput = '<div class="event-image" style="background-image:url(' + image.url + ');"></div>';
+    } else {
+        var imageOuput = '<div class="event-image date-img"><div class="month">' + moment(startDateIn).format('MMM') + '</div><div class="day">' + moment(startDateIn).format('D') + '<div class="weekday">' + imgWeekDay(moment(startDateIn).isoWeekday()) + '</div></div></div>';
+    }
+    return imageOuput;
+}
+
+function timeOutput(startDateIn, endDateIn, allDayIn, originalStart) {
+    if (allDayIn === "true") {
+        var timeOutput = 'All Day';
+    } else {
+        // Fix to remove daylight savings time
+        if (moment(startDateIn).valueOf() !=  moment(originalStart).valueOf()) {
+            var stdOffset = moment(originalStart).utcOffset();
+        } else {
+            var stdOffset = moment(startDateIn).utcOffset();
+        }
+        var timeOutput = "";
+        timeOutput += moment(startDateIn).utcOffset(stdOffset).format('h');
+        if (moment(startDateIn).utcOffset(stdOffset).format('mm') != "00") {
+            timeOutput += moment(startDateIn).utcOffset(stdOffset).format(':mm');
+        }
+        if (moment(startDateIn).utcOffset(stdOffset).format('a') != moment(endDateIn).utcOffset(stdOffset).format('A')) {
+            timeOutput += moment(startDateIn).utcOffset(stdOffset).format(' A');
+        }
+        timeOutput += ' - ';
+        timeOutput += moment(endDateIn).utcOffset(stdOffset).format('h');
+        if (moment(endDateIn).utcOffset(stdOffset).format('mm') != "00") {
+            timeOutput += moment(endDateIn).utcOffset(stdOffset).format(':mm');
+        }
+        timeOutput += moment(endDateIn).utcOffset(stdOffset).format(' A');
+    }
+    return timeOutput;
+}
+
+function filterCheck(fcLogic, fcPush, fcEvent) {
+    var fMatch = 0;
+    filterTexts.forEach(function(fTA, fI) {
+        if (fTA) {
+            fTA.forEach(function(fT) {
+                if (fT) {
+                    var eventFilter = fcEvent['filter' + (fI + 1)];
+                    var eventFilterCheck = [];
+                    if(Array.isArray(eventFilter)){
+                        eventFilter.forEach(function(ef, i) {
+                            eventFilterCheck.push(ef.toLowerCase().replace(/[^A-Za-z0-9]/g, ""));
+                        });
+                        if ($.inArray(fT, eventFilterCheck) != -1) {
+                            fMatch++
+                        }
+                    }
+                }
+            });
+        }
+    });
+    if (fcLogic === "Or") {
+       if (fMatch > 0) {
+            fcPush.push(fcEvent);
+        }
+    } else if (fcLogic === "And") {
+        if (fMatch == filterTextsAll.length) {
+            fcPush.push(fcEvent);
+        }
+    }
+}
+
+function relatedEventsAjax() {
+    $.ajax({
+        url: currentDataURL.replace(/&amp;/g, '&'),
+        success: function(URLData) {
+            calculateRecurrences(URLData.events).then(function(resultsR) {
+                eventDateChecker(URLData.events, resultsR, "related-events").then(function(results) {
+                    jsonToCurrentData(results).then(function(results) {
+                        results.jsonToCurrentDataEvents.sort(function(a, b) {
+                            return +new Date(a.startDate) - +new Date(b.startDate);
+                        });
+                        $.each(results.jsonToCurrentDataEvents, function(i, v) {
+                            if (v.id != currentEventID) {
+                                if (moment(v.startDate).diff() > 0) {
+                                    filterCheck(relatedEventsFilterLogic, relatedEvents, v);
+                                }
+                            }
+                            if (relatedEvents.length >= 6) {
+                                return false;
+                            }
+                        });
+                        if (relatedEvents.length > 0) {
+                            getRelatedEvents(relatedEvents).then(function(results) {
+                                $('.related-events .events').empty();
+                                $('.related-events .events').append(results.events);
+                                if (typeof afterHHRelatedEventsLoad == 'function') { 
+								    setTimeout(function(){ 
+                                        afterHHRelatedEventsLoad(); 
+								    }, 50);
+                                }
+                            });
+                        } else {
+                            $('.related-events .events').empty();
+                            $('.related-events .events').append('<div><p style="text-align:center">No upcoming related events found.</p></div>');
+                        }
+                    });
+                });
+            });
+        },
+        error: function(data) {
+            if (data.status == 200) {
+                console.log("JSON Not Valid: " + currentDataURL);
+            } else {
+                console.log("Data URL Not Found: " + currentDataURL);
+            }
+        }
+    });
+}
+
+function blockEvents() {
+    $.ajax({
+        url: currentDataURL.replace(/&amp;/g, '&'),
+        success: function(URLData) {
+            calculateRecurrences(URLData.events).then(function(resultsR) {
+                eventDateChecker(URLData.events, resultsR, "hh-events-block").then(function(results) {
+                    jsonToCurrentData(results).then(function(results) {
+                        results.jsonToCurrentDataEvents.sort(function(a, b) {
+                            return +new Date(a.startDate) - +new Date(b.startDate);
+                        });
+                        var blockEventsCount = 0;
+                        if (hhEventsType == "current") {
+                            $.each(results.jsonToCurrentDataEvents, function(i, v) {
+                                if (moment(v.startDate).diff() > 0) {
+                                    blockEventsCount++;
+                                    hhEvents.push(v);
+                                    if (blockEventsCount == hhEventsLimit) {
+                                        return false;
+                                    }
+                                }
+                            });
+                        } else {
+                            $.each(results.jsonToCurrentDataEvents, function(i, v) {
+                                if (moment(v.startDate).diff() > 0) {
+                                    filterCheck(hhEventsFilterLogic, hhEvents, v);
+                                }
+                                if (hhEvents.length >= hhEventsLimit) {
+                                    return false;
+                                }
+                            });
+                        }
+                        if (hhEvents.length > 0) {
+                            getBlockEvents(hhEvents).then(function(results) {
+                                console.log(hhEvents);
+                                $('.hh-events-block .row.events').empty();
+                                $('.hh-events-block .row.events').append(results.events);
+                                if (typeof afterHHEventsLoad == 'function') { 
+								    setTimeout(function(){ 
+                                        afterHHEventsLoad(); 
+								    }, 50);
+                                }
+                            });
+                        } else {
+                            $('.hh-events-block .row.events').empty();
+                            $('.hh-events-block .row.events').append('<div><p style="text-align:center">No upcoming events found.</p></div>');
+                        }
+                    });
+                });
+            });
+        },
+        error: function(data) {
+            if (data.status == 200) {
+                console.log("JSON Not Valid: " + currentDataURL);
+            } else {
+                console.log("Data URL Not Found: " + currentDataURL);
+            }
+        }
+    });
+}

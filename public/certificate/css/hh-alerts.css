@@ -1,0 +1,14 @@
+.alert {
+	border-radius: 0;
+	margin-bottom: 0;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 0.9em;
+	padding:7px;
+}
+ a.close {
+	 text-decoration: none;
+}
+
+.alert-heading{
+    font-weight:600;
+}

@@ -1,0 +1,40 @@
+/** */
+.videoWrapper video,
+.videoWrapper iframe {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	/*min-width: 100%;*/
+	width: 100%;
+	min-height: 100%;
+}
+.bxslider .sliderImg.des iframe {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    min-height: 100%;
+    min-width: 100%;
+}
+
+.sliderCaption.flex {
+	width: 100%;
+	padding: 4% 3% 0 3%;
+	flex-flow: row nowrap;
+}
+
+.sliderCaption.flex > .sliderCaptionBtn {
+	width: calc(100% / 3);
+}
+
+.sliderCaption.flex.justify-left {
+	justify-content: flex-start;
+}
+.sliderCaption.flex.justify-right {
+	justify-content: flex-end;
+}
+.sliderCaption.flex.justify-center {
+	justify-content: center;
+}
+.controls-no-top-margin .bx-controls-direction {
+	margin-top: 0px;
+}
