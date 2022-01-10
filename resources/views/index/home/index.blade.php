@@ -1115,6 +1115,7 @@
                         </div>
                     </nav>
                     <!-- END Menu section -->
+                    <!-- END Menu ssection  -->
                 </div>
             </div>
         </div>
@@ -2032,7 +2033,7 @@
     <!-- end of container canvas -->
     <!-- left canvas -->
     <div class="custom-responsive-width" off-canvas="id-1 left overlay">
- 
+
 
         <!-- Menu mobile -->
 
