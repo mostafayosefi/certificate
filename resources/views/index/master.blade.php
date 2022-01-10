@@ -5,6 +5,8 @@
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport" />
     <meta content="IE=edge" http-equiv="X-UA-Compatible" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="google-site-verification" content="XNwbnXCnNrKdwLQ03yJJb-kR-PhvdfLK30LXZ23Q-CU" />
+    <meta name="msvalidate.01" content="594385FB78084A685DFC420A86BDA033" />
     <title>
         {{$setting->title}}
          {{ $tabTitle ?? '' }}</title>
@@ -89,7 +91,7 @@
 
 
 
-    @include('index.layouts.alertswl') 
+    @include('index.layouts.alertswl')
 
 
 @yield('script')

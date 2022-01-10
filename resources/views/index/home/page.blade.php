@@ -1,7 +1,7 @@
   @component('index.layouts.content', [
-      'title' => 'My Page',
-      'tabTitle' => ' My Page',
-      'breadcrumb' => [['title' => 'Home', 'url' => route('index.home') , 'class' => 'bcHome'], ['title' => 'My Page ',
+      'title' => 'Service',
+      'tabTitle' => ' Service',
+      'breadcrumb' => [['title' => 'Home', 'url' => route('index.home') , 'class' => 'bcHome'], ['title' => 'Service',
       'class' => 'bcLink bcCurrentLink']],
       ])
 

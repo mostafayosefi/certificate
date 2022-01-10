@@ -13,7 +13,8 @@
 
             <div class="mob col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                 <div class="hp-cta-bar-sect2">
-                    <a class="lineSepBtnR" href="tel:8004465400"><i class="fas fa-phone centerBlockIcon"></i>CALL</a>
+                    <a class="lineSepBtnR" href="{{route('index.home')}}">
+                        <i class="fas fa-home centerBlockIcon"></i>Home</a>
                 </div>
             </div>
 
@@ -28,8 +29,8 @@
 
             <div class="mob col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                 <div class="hp-cta-bar-sect2">
-                    <a class="lineSepBtn" href="/requestinfo/index.asp"><i
-                            class="fab fa-wpforms centerBlockIcon"></i>REQUEST INFO</a>
+                    <a class="lineSepBtn" href="{{route('index.tracking')}}"><i
+                            class="fa fa-search centerBlockIcon"></i>Tracking</a>
                 </div>
             </div>
 

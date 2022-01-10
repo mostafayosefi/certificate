@@ -1,19 +1,20 @@
 
 
 @if($image_page)
-<div class="container">
+<div class="container" style="max-height:600px;  ">
     <div class="row">
-        <div class="col-12 col-sm-12 col-md-12 bannerWrap">
+        <div class="col-12 col-sm-12 col-md-12 bannerWrap"  >
             <div class="bannerCont-r">
-                <img alt="3 Female students smiling" class="center img-fluid des"
+                <img alt="{{$title}}" class="center img-fluid des"
+                style="margin:0px auto;background-color:#000000;padding:0px;margin-top:-50px;margin-bottom:0px"
                     src="{{asset($image_page)}}" />
-                <img alt="3 Female students smiling mobile image" class="center img-fluid mob"
+                <img alt="{{$title}}" class="center img-fluid mob"
                     src="{{asset($image_page)}}" />
             </div>
             <div class="bannerCont-l">
                 <div class="sliderCaption2">
 
-                  <span class="captionTitleTxt2">{{$title}}</span>
+                  <span class="captionTitleTxt2" style="background-color: rgba(0, 0, 0, 0.808); color:darkkhaki " >{{$title}}</span>
 
                 </div>
             </div>
@@ -78,8 +79,8 @@
 
 
             <div class="mob col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                <div class="hp-cta-bar-sect2"><a href="/admissions/apply/index.html"><i aria-hidden="true"
-                            class="fas fa-file-export"></i>APPLY NOW</a></div>
+                <div class="hp-cta-bar-sect2"><a href="{{route('index.blogs')}}"><i aria-hidden="true"
+                            class="fas fa-file-export"></i>Blog</a></div>
             </div>
 
 

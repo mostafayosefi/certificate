@@ -10,10 +10,8 @@
 
 @foreach ($awards as $award )
 
-<div class="col-6 col-sm-6 col-md-2 col-lg-2" id="applyTrigg">
-    <a href="">
-        <img alt="{{$award->title}}" class="img-fluid"
-            src="{{$award->image}}" /></a>
+<div class="col-6 col-sm-6 col-md-1 col-lg-1" id="applyTrigg">
+        <img  class="img-fluid" src="{{$award->image}}" />
 </div>
 @endforeach
 

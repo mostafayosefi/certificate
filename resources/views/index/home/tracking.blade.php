@@ -6,11 +6,18 @@
       ])
 
 
-@slot('slider')
 
-
+@slot('style')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 @endslot
+
+@slot('slider')
+
+@include('index.layouts.image_title', [  'title' => 'Contact Us' , 'image_page' => $txtdese->image ])
+
+@endslot
+
 
 
 
@@ -40,9 +47,6 @@
                                         </div>
                                         @method('PUT')
                                         <button class="btn btnYellow" type="submit">Search
-                                            @if($tracking)
-                                            {{$tracking->id}}
-                                            @endif
                                         </button>
                                     </form>
 
