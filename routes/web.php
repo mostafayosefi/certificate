@@ -88,7 +88,7 @@ Route::get('/clear-cache', function() {
     return 'Application cache cleared';
 });
 
-// Clear view cache
+// Clear view cachee
 Route::get('/view-clear', function() {
     Artisan::call('view:clear');
     return 'View cache cleared';
