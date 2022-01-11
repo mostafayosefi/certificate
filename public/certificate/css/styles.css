@@ -83,20 +83,20 @@
    font-size: 1em;
    font-weight: 400;
    text-decoration: underline;
-   line-height: 1.5 
+   line-height: 1.5
 }
  a:hover {
    color: #0056b3;
    text-decoration: underline;
 }
  hr {
-   border-top: 1px solid #ccccd1 
+   border-top : 1px solid #ccccd1
 }
  .text-left {
    text-align: left !important;
 }
  .text-center {
-   text-align: center !important;
+   text-align: center !im portant;
 }
  .text-right {
    text-align: right !important;
@@ -105,7 +105,7 @@
    display:inline;
 }
  .noPadding, .noPad {
-   padding: 0 
+   padding: 0
 }
  .sep10 {
    margin-top: 10px !important;
@@ -157,45 +157,45 @@
    display: block;
    text-align: center;
    margin-right: auto;
-   margin-left: auto 
+   margin-left: auto
 }
  .imgResponsive, .imgRes {
-   width: 100% 
+   width: 100%
 }
  .fullWidth {
-   width: 100% 
+   width: 100%
 }
  .img-responsive, .img-fluid{
    display: block;
    max-width: 100%;
-   height:auto;
+   height:au to;
 }
  .no-gutters > [class*='col-'] {
-   padding-right:0;
+   paddi ng-right:0;
    padding-left:0;
 }
- .no-pad{
-   padding: 0 !important 
+  .no-pad{
+   padding: 0 !important
 }
  input:focus, textarea:focus {
-   outline: none 
+   outline: none
 }
  input::-moz-focus-inner {
-   border: 0 
+   border: 0
 }
  a img {
-   outline: none 
+   outline: none
 }
  img {
    border: 0;
   /*max-width: 100%;
-   hh addition */
+   hh additi on */
 }
- button, button:link, button:focus, button:active, button:hover, button:visited, .btn, .btn:link, .btn:focus, .btn:active, .btn:hover, .btn:visited, a, a:link, a:focus, a:active, a:hover, a:visited {
+ button, button:link, button:focus, button:ac tive, button:hover, button:visited, .btn, .bt n:link, .btn:focus, .btn:active , .btn:hover, .btn:visited, a, a:link, a:focus, a:active, a:hover, a:visited {
    border: 0;
    outline: none;
    outline: 0;
-   border-color: transparent 
+   border-color: transparent
 }
  .btn {
    border-radius: 0;
@@ -204,13 +204,13 @@
    transition: none;
 }
  .clearfix {
-   clear: both 
+   clear: both
 }
  .white{
    color: #fff !important;
 }
  .gold{
-   color: #ebbf14 !important;
+   color: #eb bf14 !important;
 }
  .blue{
    color:#172e81 !important;
@@ -224,42 +224,42 @@
    color:#232323 !important;
 }
  .des {
-   display: block!important 
+   display: block!important
 }
  @media(max-width:576px) {
    .des {
-     display: none!important 
+     display: none!important
   }
 }
  .mob {
-   display: none!important 
+   display: none!important
 }
  @media(max-width:576px) {
    .mob {
-     display: block!important 
+     display: block!important
   }
 }
 /* Top bar */
  .topBarWrap{
-   -webkit-box-align: center;
+   -webkit-bo x-align: center;
    -ms-flex-align: center;
-   align-items: center 
+   align-items: center
 }
- #topBar{
+ #t opBar{
    background-color: #ebbf14;
-   color: #172e81;
+   color : #172e81;
    width: 100%;
    min-height: 25px;
    padding-top: 0px;
 }
- .topBarTxt{
+ . topBarTxt{
    font-size: 0.8em;
    font-weight: 600;
    text-align: center;
    width: 100%;
    margin: 5px 0;
 }
- .topBarTxt a, .topBarTxt button {
+ .topBarT xt a, .topBarTxt button {
    font-size:1em;
    font-weight: 600;
    text-align: center;
@@ -372,7 +372,7 @@
  .navbar-dark .navbar-nav .nav-link {
    color: rgba(255,255,255,1);
    font-size: 0.85em;
-   text-decoration: none !important 
+   text-decoration: none !important
 }
  .navbar .nav-link{
    text-transform: uppercase;
@@ -389,7 +389,7 @@
 }
  span.navTopLevelMenu{
    display: block;
-   padding: 15px 0.5rem;
+   padding: 15px  0.5rem;
    line-height: 20px;
    position: relative;
    cursor: pointer;
@@ -510,7 +510,7 @@
    padding: 10px 20px;
    display: block;
    position: relative;
-   line-height: 1.5 
+   line-height: 1.5
 }
 /* breakpoint and up - mega dropdown styles */
  .navbar .dropdown-menu div[class*="col"] {
@@ -527,7 +527,7 @@
 }
  .dropdown-menu .nav-link{
    text-transform: capitalize;
-   font-family: 'HelveticaNeueLTStd-Roman',Helvetica,Arial,sans-serif;
+   font-family: 'HelveticaNeueLTStd-Roman',Helvetica,Aria l,sans-serif;
    text-decoration: none;
    color: #363c41 !important;
    font-size: 0.85em;
@@ -538,11 +538,11 @@
   /*text-decoration: underline;
    */
    background: #172e81;
-   color: white !important 
+   color: white !important
 }
  .submenuTit{
    font-weight: bold;
-   color: #172e81 
+   color: #172e81
 }
  .submenuP{
    font-size: 0.85em;
@@ -550,7 +550,7 @@
    text-align: justify;
 }
  .mainLogoMenuMob{
-   display: none 
+   display: none
 }
  .navbar-brand img{
    width: 200px;
@@ -576,10 +576,10 @@
      right:0;
     /* height of nav-item */
      top:38px;
-     border-radius: 0 
+      border-radius: 0
   }
    .navbar .dropdown:hover .dropdown-menu, .navbar .dropdown .dropdown-menu:hover {
-     display:block!important;
+     display:blo ck!important;
   }
    .menuSearchItem{
      display: -webkit-box;
@@ -604,7 +604,7 @@
    color: #172e81 !important;
 }
  .nav-item a{
-   padding: 0 2%;
+   padding: 0 2 %;
 }
  .menuSearchItem:hover, .menuSearchItem a:hover, #searchBtnHP:hover{
    background-color: #ebbf14;
@@ -957,7 +957,7 @@
  .sliderCaptionBtn2:hover{
    background: #6c757d;
    text-decoration: none;
-   color: #fff 
+   color: #fff
 }
  .mainBtnYellow{
    display: block;
@@ -1014,7 +1014,7 @@
 
 .btnSlider-yellow:hover{
   background: #6c757d !important;
-   color: #fff !important;
+   color : #fff !important;
 }
 
 
@@ -1293,10 +1293,10 @@
    text-align: center;
 }
  .homeCaleTime{
-   line-height: 1.6 
+   line-height: 1.6
 }
  .homeCaleLoc{
-   line-height: 1.6 
+   line-height: 1.6
 }
  .blue{
    color:#172e81 !important;
@@ -1334,7 +1334,7 @@
    padding-bottom: 0;
 }
  .todStoTit{
-   color: 
+   color:
 }
  .storiesContYell{
    background-color: #ebbf14;
@@ -1373,9 +1373,9 @@
    padding: 0 10%;
 }
 /* footer section */
- #footer{
+ #foot er{
    background-color: #172e81;
-   padding: 2% 0;
+   pad ding: 2% 0;
    color: #fff;
 }
  .footerLogo{
@@ -1419,7 +1419,7 @@
   }
 }
  .socialIconsCont a{
-   padding: 0 5px;
+   padding: 0  5px;
 }
  .footerInfoTxt{
    margin-top: 2%;
@@ -1478,7 +1478,7 @@
  .footerLinks ul li{
    margin: 0;
    padding: 0;
-   line-height: 0 
+   line-height: 0
 }
  @media(max-width:576px) {
    .footerLinks ul li{
@@ -1561,9 +1561,9 @@
    height: 100px;
 }
  .bannerTxt{
-   padding: 0 5% 
+   padding: 0 5%
 }
- .bannerTxt h1{
+ .bannerTxt  h1{
    color: white;
    font-weight: 400;
 }
@@ -1593,7 +1593,7 @@
  .rightSideBar a{
    color: #172e81;
    margin-bottom: 5%;
-   display: block 
+   display: block
 }
  .rightSideBar a:hover{
    color: #ebbf14;
@@ -1631,7 +1631,7 @@
    -o-transition: all .5s ease-in-out;
    transition: all .5s ease-in-out;
    -webkit-transform: translate(0, -10px);
-   -ms-transform: translate(0, -10px);
+   -ms-transfo rm: translate(0, -10px);
    transform: translate(0, -10px);
    padding-bottom: 0;
    box-shadow: 0 5px 5px -2px rgba(0,0,0,0.75);
@@ -1657,7 +1657,7 @@
      margin: 5px;
   }
    ul.socialIcons {
-     text-align: center;
+     text-a lign: center;
      margin: 20px auto 0 auto;
   }
 }
@@ -1698,13 +1698,13 @@
    background: #ffffff;
 }
  .socialIcons .facebook a i{
-   left: 3px 
+   left: 3px
 }
  .socialIcons .youtube, .socialIcons .YouTube {
    background: #ffffff;
 }
  .socialIcons .youtube a i, .socialIcons .YouTube a i{
-   left: -2px 
+   left: -2px
 }
  .socialIcons .twitter {
    background: #ffffff;
@@ -1791,13 +1791,13 @@
  @media (max-width: 576px){
    .hp-cta-bar-sect{
      height: auto;
-     -webkit-box-align: center;
+     - webkit-box-align: center;
      -ms-flex-align: center;
      align-items: center;
      border-bottom: 1px solid #ffffff;
   }
 }
- .hp-cta-bar-sect a, .hp-cta-bar-sect button{
+ .hp-cta-bar-sect a, .hp- cta-bar-sect button{
    font-family: 'HelveticaNeueLTStd-Roman',Helvetica,Arial,sans-serif;
    width: 100%;
    padding: 15px;
@@ -1948,7 +1948,7 @@
    font-family: 'HelveticaNeueLTStd-Roman',Helvetica,Arial,sans-serif;
    font-weight: bold;
    font-size: 4em;
-   color: #ebbf14 
+   color: #ebbf14
 }
  .btnTitle{
    margin: 20px 0;
@@ -2018,7 +2018,7 @@
  .ctaWrapper a:hover, .ctaWrapper button:hover{
    color: #172e81;
    background-color: #ebbf14;
-   text-decoration: none 
+   text-decoration: none
 }
  .ctaWrapper{
    background-color: rgba(255, 255, 255, 0.7);
@@ -2041,7 +2041,7 @@
    flex-direction: column;
 }
  #ctaSection{
-   background-image: url('../images/bg-image-cta.jpg');
+   background-image: url('../images/bg-image-cta.jpg ');
    background-repeat: no-repeat;
    background-position: center 85%;
    width: 100%;
@@ -2072,7 +2072,7 @@
  .bannerCont{
    display: -webkit-box;
    display: -ms-flexbox;
-   display: flex 
+   display: flex
 }
  @media (max-width: 576px){
    .bannerWrap{
@@ -2118,7 +2118,7 @@
    display: block;
    color: #f2f2f2;
    text-align: center;
-   padding: 14px 16px;
+   padding: 14px  16px;
    text-decoration: none;
    font-size: 17px;
 }
@@ -2184,7 +2184,7 @@
    ;
 }
  .dropdownInfo-content a:hover {
-   background-color: #ddd;
+   backgrou nd-color: #ddd;
    color: black;
 }
  .dropdownInfo:hover .dropdownInfo-content {
@@ -2398,7 +2398,7 @@
  .sliderCaptionBtn3:hover{
    background: #6c757d;
    text-decoration: none;
-   color: #fff 
+   color: #fff
 }
 /*Today stories*/
  .btsTit {
@@ -2544,7 +2544,7 @@
    width: 50%;
    background: white;
    padding: 3%;
-   -webkit-box-shadow: 2px 2px 8px 3px #4646466b;
+   -webkit-box-shadow: 2px 2px 8px 3p x #4646466b;
    box-shadow: 2px 2px 8px 3px #4646466b;
 }
  @media (max-width: 768px){
@@ -2568,11 +2568,11 @@
 }
  .bx-prev{
    left:10px;
-   background:url(lib/images/controls.png) 0 -32px no-repeat 
+   background:url(lib/images/controls.png) 0 -32px no-repeat
 }
  .bx-next{
    right:10px;
-   background:url(lib/images/controls.png) -43px -32px no-repeat 
+   background:url(lib/images/controls.png) -43px -32px no-repeat
 }
  .bx-controls-direction a{
    width: 35px;
@@ -2655,7 +2655,7 @@
 }
  .progBtnPos{
    position: relative;
-   bottom: 0px 
+   bottom: 0px
 }
  .sep50Force {
    height: 50px;
@@ -2677,7 +2677,7 @@
    padding: 5%;
 }
  .rounded{
-   border-radius: 50% !important 
+   border-radius: 50% !important
 }
  #onlSocialSec{
    padding: 3% 0;
@@ -2718,13 +2718,13 @@
    font-size: 1.25em;
    background-color: #ebbf14;
    color: #172e81;
-   text-align: center;
+   text-align: ce nter;
    width: 100%;
    display: block;
    margin: 5% 0 0 0;
 }
  .onlBigBtnYell:hover{
-   text-decoration: none;
+   text-de coration: none;
    background-color: #2d2d2d;
    color: white;
 }
@@ -2751,7 +2751,7 @@
    font-family: 'Befont_webnormal',Helvetica,Arial,sans-serif;
    font-size: 6rem;
    color: #172e81;
-   line-height: 0.5 
+   line-height: 0.5
 }
  .socSmallHeaderTitle span.beTtxSoc {
    font-family: 'HelveticaNeueLTStd-Roman',Helvetica,Arial,sans-serif;
@@ -2800,7 +2800,7 @@
 }
  .socialIconsPageTop li {
    list-style: none;
-   display: inline-block;
+   dis play: inline-block;
    margin: 5px;
    border-radius: 2em;
    overflow:hidden;
@@ -2818,7 +2818,7 @@
  .socialIconsPageTop li a {
    display: block;
    padding: .5em;
-   max-width: 40px;
+   max-wi dth: 40px;
    min-width: 40px;
    height: 40px;
    white-space: nowrap;
@@ -2852,7 +2852,7 @@
    background: #172e81;
 }
  .socialIconsPageTop .facebook a i{
-   left: 3px 
+   left: 3px
 }
  .socialIconsPageTop .twitter {
    background: #172e81;
@@ -2888,7 +2888,7 @@
    left: -0.5px;
 }
  .socialIconsPageTop .youtube, .socialIconsPageTop .YouTube {
-   background: #172e81;
+    background: #172e81;
 }
  .socialIconsPageTop .youtube a i, .socialIconsPageTop .YouTube a i {
    left: -0.5px;
@@ -3009,12 +3009,12 @@
  .btnSearchStories:hover{
    background: #6c757d;
    color: white;
-   transition: all 
+   transition: all
 }
  .form-control{
    border-radius: 0;
 }
- .goog-te-gadget-simple{
+ .goo g-te-gadget-simple{
    width: 100%;
    overflow: hidden;
 }
@@ -3061,18 +3061,18 @@
    color: #363c41;
 }
  .topSpace{
-   margin-top:10% 
+   margin-top:10%
 }
  @media (max-width: 576px){
    .topSpace{
-     margin-top:0 
+     margin-top:0
   }
 }
  .livPersTrig{
    display: none !important;
 }
  .hide, .hidden{
-   display: none !important 
+   display: none !important
 }
  .list-group-item.active, .list-group-item.active:focus {
    z-index: 2;
@@ -3176,7 +3176,7 @@
  .close {
    font-size: 29px;
    color: #e60c0c;
-   filter: alpha(opacity=100);
+   filter: alpha(opacity=1 00);
    opacity: 1;
 }
  .close:focus, .close:hover {
@@ -3228,26 +3228,26 @@
    align-items: center;
 }
  .caretDown{
-   padding: 0;
+   padding:  0;
    margin: 0 0;
    display: inline-block;
    width: 30px;
-   height: 30px;
+   h eight: 30px;
    text-align: center;
    position: relative;
    top: 0px;
    line-height: 1.3;
-   font-size: 1.5em;
+   font-siz e: 1.5em;
    color: #172e81;
    background: none;
 }
  .topCatElem{
    display: inline-block;
-   width: auto 
+   width: auto
 }
  .topCatElem .nav-link{
    display: inline-block;
-   width: auto 
+   width: auto
 }
  .topcatwrap{
    display: flex;
@@ -3308,11 +3308,11 @@
      text-decoration: none;
   }
    .nav-item a {
-     padding: 0 
+     padding: 0
   }
    #myinfoNavMob{
      border-bottom: thin solid #ccc;
-     text-align: left 
+     text-align: left
   }
    .dropdownInfo .dropbtn{
      text-align: left;
@@ -3351,7 +3351,7 @@
      font-size: 14px;
      border: 2px solid #9E9E9E !important;
      border-radius: 10px;
-     color: #172e81 
+     color: #172e81
   }
    #navBarMob .dropdown-menu {
      margin: 5% 0;
@@ -3400,7 +3400,7 @@
    position: absolute;
    background-color: #f9f9f9;
    min-width: 160px;
-   -webkit-box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+   -webkit-box-shadow: 0px 8px 16p x 0px rgba(0,0,0,0.2);
    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
    z-index: 1;
 }
@@ -3416,7 +3416,7 @@
    display: block;
    text-align: left;
    font-size: 0.85em;
-   width: 100% 
+   width: 100%
 }
  .audienceWrap{
    margin: 3% 0 6% 0;
@@ -3430,7 +3430,7 @@
  @media (max-width: 992px){
    body, html{
      overflow:initial;
-     height: auto !important 
+     height: auto !important
   }
    .modal-dialog {
      height: 100vh !important;
@@ -3478,13 +3478,13 @@
  span.menuSeparator{
    display: inline-block;
    width: 100%;
-   text-align: left;
+   text-align: lef t;
    padding: 0 10px;
 }
  #searchBtnHP-mob{
    background: none;
 }
-/*NEWS: blog section*/
+/*NEWS: blog secti on*/
  img.blogList-object{
    width:100%;
 }
@@ -3527,7 +3527,7 @@
    margin:0 auto;
 }
  .thumbFix{
-   margin-bottom:10px 
+   margin-bottom:10px
 }
 /*submenu dropdown menu*/
  .subMenu:hover>.dropdown-submenu{
@@ -3537,12 +3537,12 @@
    position: relative !important;
    border: thin solid #ccc;
    top:0;
-   display: none 
+   display: none
 }
  .dropdown-submenu:hover{
 }
  .submenuContent{
-   background: #e9ecef;
+   backgr ound: #e9ecef;
    position: absolute;
    top:-39px;
    left: 100%;
@@ -3566,12 +3566,12 @@
    text-decoration: none;
 }
  .subMenuList li{
-   padding: 0 10px 
+   padding: 0 10px
 }
  .subMenuList li:hover{
    background: #172e81;
    color: white;
-   padding: 0 10px 
+   padding: 0 10px
 }
  .subMenuList li:hover a{
    color: white;
@@ -3628,7 +3628,7 @@
  .cta-rfi-button {
    display: inline-block;
    border-radius: 24px;
-   background-color: #EBBF14;
+   background-color:  #EBBF14;
    border: none;
    color: #172E81;
    text-align: center;
@@ -3639,7 +3639,7 @@
    cursor: pointer;
    margin: 5px 5px 5px 0;
 }
- .cta-rfi-button span {
+ .c ta-rfi-button span {
    cursor: pointer;
    display: inline-block;
    position: relative;
@@ -3683,7 +3683,7 @@
   }
 }
  .dropdownSubMenuMob{
-   padding: 0 !important 
+   padding: 0 !important
 }
  @media (max-width: 768px){
    .subMenuSect h5 {
@@ -3723,7 +3723,7 @@
    background: #e9ecef;
 }
  .coursesTable tr:first-child td {
-   color: #fff;
+   c olor: #fff;
 }
  .featureSecInt{
    background-color: #b5bdd8;
@@ -3734,7 +3734,7 @@
    margin: 0 auto;
 }
  .clpBtn{
-   font-family: 'HelveticaNeueLTStd-Roman',Helvetica,Arial,sans-serif;
+   font-family: 'HelveticaNeueLTStd-Roman',He lvetica,Arial,sans-serif;
    font-weight: bold;
    font-size: 1em;
    background: #ebbf14;
@@ -3755,13 +3755,13 @@
    -o-transition: all 0.5s ease;
    transition: all 0.5s ease;
 }
- .jumbotron p {
+ .jum botron p {
    color: #172e81;
    font-weight: 900;
    font-size: 24px;
 }
  .cpl-mainCont {
-   padding: 1% 0 5% 0;
+    padding: 1% 0 5% 0;
 }
  .cpl-mainCont {
    padding: 1% 0 5% 0;
@@ -3874,7 +3874,7 @@
    align-items: flex-end;
 }
  .clpBtnCountry{
-   background-color: #dcdcdc 
+   background-color: #dcdcdc
 }
  @media (max-width: 768px){
    .clp-CtaSingle{
@@ -3883,7 +3883,7 @@
      padding: 0 1px;
   }
    .clp-IconWrap {
-     height: auto;
+      height: auto;
      padding: 10px 0;
   }
    .clp-IconWrap2 {
@@ -4069,11 +4069,11 @@
  #skip a:active,#skip a:focus{
    position:static;
    width:auto;
-   height:auto 
+   height:auto
 }
 /*facility rental slideshow*/
  .facRent-Slide1, .facRent-Slide2 {
-   display: none 
+   display: none
 }
  .facRent-Slide1 img, .facRent-Slide2 img{
    width: 100%;
@@ -4089,7 +4089,7 @@
    cursor: pointer;
    position: absolute;
    top: 50%;
-   width: auto;
+   width: aut o;
    padding: 16px;
    margin-top: -22px;
    color: black;
@@ -4127,18 +4127,18 @@
 }
  @-webkit-keyframes facRent-fade {
    from {
-     opacity: .4 
+     opacity: .4
   }
    to {
-     opacity: 1 
+     opacity: 1
   }
 }
  @keyframes facRent-fade {
    from {
-     opacity: .4 
+     opacity: .4
   }
    to {
-     opacity: 1 
+     opacity: 1
   }
 }
  .liveChatBtnWeb{
@@ -4301,12 +4301,12 @@
   }
 }
  @media (max-width: 768px){
-   .commTitle{
+    .commTitle{
      font-size: 2em;
      text-align: center;
   }
 }
- @media (max-width: 576px){
+ @media (max-width: 576 px){
    .commTitle{
      text-align: center;
      font-size: 1.7em;
@@ -4371,13 +4371,13 @@
    outline:none !important;
 }
  .accPanelTitBerk a{
-   display: block;
+   d isplay: block;
    width: 100%;
-}
+ }
  .tooltip.right .tooltip-arrow {
-   min-height: auto !important;
+   min-height: auto !important ;
 }
- .newAccordion .btnTitLink {
+ .newAccordion .btnTitLink  {
    font-weight: 400;
    color: #172e81;
    background-color: transparent;
@@ -4437,7 +4437,7 @@
    margin: 3% 0;
 }
 
-@media (max-width: 576px){  
+@media (max-width: 576px){
  #onlineFeatureSec {
    padding: 3% 0 20% 0;
    margin: 10% 0;
@@ -4445,10 +4445,10 @@
 
 }
  .LicensingCertTable{
-   font-size: 0.9em 
+   font-size: 0.9em
 }
  .LicensingCertTable p{
-   font-size: 1em 
+   font-size: 1em
 }
  .BerkTableHead{
    background-color: #bfbfbf;
@@ -4648,11 +4648,11 @@
 }
  @media (max-width: 768px){
    .mainContentBanner{
-     background-image: none !important 
+     background-image: none !important
   }
    .disVidTitle{
      min-height: 0;
-     height: initial 
+     height: initial
   }
 }
  caption{
@@ -4680,17 +4680,17 @@
    text-align: center;
 }
  .wewVideoSlider{
-   margin: 5% 0 10% 0;
+   margin: 5% 0   10% 0;
 }
  .wewVideoCont{
    flex-direction: column;
-   padding: 0 10px 
+   padding: 0 10px
 }
  .wewVideoCont p{
    text-align: center;
 }
- .wewVideoCont .slick-dots{
-   bottom: 0 !important;
+  .wewVideoCont .slick-dots{
+   bottom: 0 !import ant;
 }
  .marginEmptyTitle{
    margin-top:60px;
@@ -4698,12 +4698,12 @@
  @media (max-width: 768px){
    .no-col-show{
      flex: 0 0 0 !important;
-     padding: 0 !important 
+     padding: 0 !important
   }
 }
 /*90 years logo sect*/
  .logoSectAlign{
-   align-items: center 
+   align-items: center
 }
  .topTitle90th{
    font-family: 'HelveticaNeueLTStd-Bd',Helvetica,Arial,sans-serif;
@@ -4763,7 +4763,7 @@
    background-color: #ebbf14;
 }
  .LPMcontainer{
-   margin: 0 !important 
+   margin: 0 !important
 }
  .eventsBtnCta {
    display: block;
@@ -4845,7 +4845,7 @@
    width: 100%;
    padding: 1% 2%;
    display:flex;
-   flex-direction:column 
+   flex-direction:column
 }
  .applyBannerTxtDown{
    margin-left: 45%;
@@ -4901,10 +4901,10 @@
    .applyBannerCaption {
      width: 100%;
      padding: 3%;
-     align-items: center;
+      align-items: center;
   }
    .applyBannerTxtTop{
-     font-size: 2em;
+     font-siz e: 2em;
      margin-bottom: 3%;
   }
    .applyBannerTxtDown {
@@ -4933,7 +4933,7 @@
 }
  .sliderDynamicBannerBtn {
    display: inline-block;
-   background: #ebbf14;
+   backgrou nd: #ebbf14;
    font-size: 0.8em;
    color: #2f2f2f;
    padding: 5px 10px;
@@ -4949,7 +4949,7 @@
    text-decoration: none;
 }
  .sliderDynamicBannerBtn:visited{
-   text-decoration: none;
+   text-dec oration: none;
 }
  @media (max-width: 1200px){
    .applyBannerTxtTopHp {
@@ -5016,7 +5016,7 @@
 }
  @media (max-width: 576px){
    .bulletListColumnSeparator{
-     margin-top: -15px;
+     margin-top: -1 5px;
   }
 }
 
@@ -5050,7 +5050,7 @@
 
 .alertSection{
       height: 200px;
-     display: flex; 
+     display: flex;
     width: 100%;
     justify-content: center;
     flex-direction: column;
@@ -5067,7 +5067,7 @@
 .bgBlue{
   background-color:  #132e81 !important;
 }
-@media (max-width: 576px){  
+@media (max-width: 576px){
   .alertSection {
       height: auto;
       padding: 10%;
@@ -5109,7 +5109,7 @@
    margin-bottom: 3%;
 }
 
-@media (max-width: 576px){  
+@media (max-width: 576px){
 .ceBtnOnFeature{
     width: 100%;
     margin: 8% auto;
@@ -5130,7 +5130,7 @@ hr.ceFeature2{
 .whyWrap{
    text-align: center;
     display: flex;
-    flex-direction: column;
+    f lex-direction: column;
     border: thin solid #ccc;
     padding: 5%;
     min-height: 300px;
@@ -5148,7 +5148,7 @@ hr.ceFeature2{
 }
 
 .whyPanelDef .panel-heading{
-   
+
 }
 
 .accPanelTitBerk2{
@@ -5194,7 +5194,7 @@ hr.ceFeature2{
   padding-left: 18px;
   margin: 2% 0;
   margin-left: 0px;
-}  
+}
 
 
 
@@ -5220,7 +5220,7 @@ hr.ceFeature2{
 .sliderMainTitle{
   font-family: 'Helvetica Neue LT Std', Helvetica,Arial,sans-serif;;
   display: block;
-  font-weight: 900; 
+  font-weight: 900;
   font-style: normal;
   font-size: 2em;
   line-height: 1;
@@ -5230,7 +5230,7 @@ hr.ceFeature2{
 .sliderTitle1{
   font-family: 'Helvetica Neue LT Std';
   display: block;
-  font-weight: 900; 
+  font-weight: 900;
   font-style: normal;
   font-size: 2em;
   line-height: 1;
@@ -5239,7 +5239,7 @@ hr.ceFeature2{
 .sliderTitle2{
   font-family: 'Helvetica Neue LT Std';
   display: block;
-  font-weight: 700; 
+  font-weight: 700;
   font-style: normal;
   font-size: 1em;
   line-height: 1;
@@ -5248,7 +5248,7 @@ hr.ceFeature2{
 
 .sliderText{
   font-family: 'Helvetica Neue LT Std';
-  font-weight: 500; 
+  font-weight: 500;
   font-style: normal;
   font-size: 1.2em;
   line-height: 1;
@@ -5256,8 +5256,8 @@ hr.ceFeature2{
   color:  #172e81;
 }
 
-@media (max-width: 615px){  
-    
+@media (max-width: 615px){
+
 .tp-shapewrapper{
   background-color: rgba(23, 46, 129, 0.7) !important ;
 }
@@ -5388,7 +5388,7 @@ height: 700px;
   display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: ce nter;
 }
 
 .referrLeft p{
@@ -5403,7 +5403,7 @@ height: 700px;
     color: #515151!important
 
 }
-@media (max-width: 576px){  
+@media (max-width: 576px){
 
 .referrLeft{
   margin: 10%;
@@ -5422,7 +5422,7 @@ height: 700px;
 
 .flexCol{
 display: flex;
-    flex-direction: column;
+    flex-di  rection: column;
     align-items: flex-start;
     padding: 4%;
 }
@@ -5477,7 +5477,7 @@ display: block;
 
 
 .referTestName{
-  text-align: right;
+    text-align: right;
 }
 
 .referral-button {
@@ -5507,7 +5507,7 @@ display: block;
     width: 40px;
     background: #ffc107;
     /* border-radius: 60%; */
-    display: flex;
+    d   isplay: flex;
     flex-direction: column;
     align-content: center;
     justify-content: center;
@@ -5542,12 +5542,12 @@ background-color: #172e81!important;
 .refNewsBg {
     position: relative;
     z-index: 101;
-    background-size: 1920px;
+    backgrou  nd-size: 1920px;
     background-image: url(/images/title-image.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     text-align: center;
-   
+
     padding: 1%;
     display: flex;
     flex-direction: column;
@@ -5563,7 +5563,7 @@ background-color: #172e81!important;
 }
 
 .shadow-sm {
-    box-shadow: 0 0.125rem 0.125rem -0.125rem rgb(31 27 45 / 45%), 0 0.25rem 0.75rem rgb(31 27 45 / 45%) !important;
+    box-shadow: 0 0.125rem 0.125rem -0.125rem rgb(31 27 45 / 45%), 0 0.25rem 0.75rem rgb(31 27  45 / 45%) !important;
 }
 
 @media (min-width: 500px){
@@ -5580,7 +5580,7 @@ background-color: #172e81!important;
 .refSlider{
 
   display: flex;
-  flex-direction: row;
+  flex-direct ion: row;
   align-items: center;
 }
 
@@ -5590,7 +5590,7 @@ background-color: #172e81!important;
     flex-direction: column;
     min-width: 0;
     word-wrap: break-word;
-    background-color: #fff;
+    background-color:  #fff;
     background-clip: border-box;
     border: none;
     border-radius: 0px;
@@ -5601,7 +5601,7 @@ background-color: #172e81!important;
     border-radius: 0.75rem !important;
 }
 
-.referContact{
+.refe rContact{
   margin-top: 4%;
   color: white;
 }
@@ -5615,8 +5615,8 @@ background-color: #172e81!important;
   margin-top: 100px;
 }
 
-.referral-button2{
-  font-size: 1em;
+.referral-button2  {
+      font-size: 1em;
     padding: 10px;
     background: #4c4c4c;
     color: white;
@@ -5656,7 +5656,7 @@ background-color: #172e81!important;
 .beSubTitle{
   font-family: 'Helvetica Neue LT Std';
   font-size: 1.6em;
-  font-weight: 500; 
+  font-weight: 500;
   font-style: normal;
   line-height: 1;
   display: block;
@@ -5665,14 +5665,14 @@ background-color: #172e81!important;
 
 .BCTitle1{
   font-family: 'Helvetica Neue LT Std';
-  font-weight: 900; 
+  font-weight: 900;
   font-style: normal;
   font-size: 2em;
   line-height: 1;
 }
 .BCTitle2{
   font-family: 'Helvetica Neue LT Std';
-  font-weight: 700; 
+  font-weight: 700;
   font-style: normal;
   font-size: 2em;
   line-height: 1;
@@ -5680,7 +5680,7 @@ background-color: #172e81!important;
 
 .BCText{
   font-family: 'Helvetica Neue LT Std';
-  font-weight: 500; 
+  font-weight: 500;
   font-style: normal;
   font-size: 1.5em;
   line-height: 1;
@@ -5803,7 +5803,7 @@ cursor: pointer;
 }
 
 .slick-dotted.slick-slider {
-     margin-bottom: 0px; 
+     margin-bottom: 0px;
 }
 
 .online-badges{
@@ -5823,7 +5823,7 @@ display: inline-block;
 }
 
 
-@media (max-width: 576px){  
+@media (max-width: 576px){
   .online-badges{
   justify-content: space-evenly;
   margin-top: 0

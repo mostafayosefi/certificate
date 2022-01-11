@@ -87,26 +87,31 @@
                             <div class="dropdown-menu">
 
                                 <div class="">
+
+
+                                    @foreach ($listpages->chunk(3) as $chunk)
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        @foreach ($chunk as $page)
+                                            <div class="col-md-4">
+                                                <ul class="nav flex-column" itemscope="itemscope"
+                                                    itemtype="">
 
+                                                    <li class="nav-item" itemprop="name"><a class="nav-link"
+                                                        href="{{ route('index.service', $page) }}" itemprop="url">
+                                                        {{$page->title}}</a></li>
 
-                                            <ul class="nav flex-column" itemscope="itemscope"
-                                                itemtype="">
-
-
-
-                                @foreach ($listpages as $page )
-                                <li class="nav-item" itemprop="name"><a class="nav-link"
-                                    href="{{ route('index.service', $page) }}" itemprop="url">
-                                    {{$page->title}}</a></li>
-                                     @endforeach
-
-
-
-                                            </ul>
-                                        </div>
+                                                    </ul>
+                                                </div>
+                                        @endforeach
                                     </div>
+                                   @endforeach
+
+
+
+
+ 
+
+
                                 </div>
                             </div>
                         </li>
