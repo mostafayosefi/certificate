@@ -6,7 +6,7 @@
         <div class="col-12 col-sm-12 col-md-12 bannerWrap"  >
             <div class="bannerCont-r">
                 <img alt="{{$title}}" class="center img-fluid des"
-                style="margin:0px auto;background-color:#000000;padding:0px;margin-top:-50px;margin-bottom:0px"
+                style="margin:0px auto;background-color:#000000;padding:0px;margin-top:-49px;margin-bottom:0px"
                     src="{{asset($image_page)}}" />
                 <img alt="{{$title}}" class="center img-fluid mob"
                     src="{{asset($image_page)}}" />
