@@ -34,6 +34,7 @@
 
 </style>
 
+
 @if ($image_page)
     <div class="container" style="max-height:600px;  ">
         <div class="row">

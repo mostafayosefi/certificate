@@ -183,6 +183,7 @@ return [
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
         App\Providers\MenuindexProvider::class,
+        App\Providers\NotifadminProvider::class,
 
     ],
 

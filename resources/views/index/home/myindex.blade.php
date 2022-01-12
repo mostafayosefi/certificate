@@ -38,7 +38,7 @@ data-transition="slotfade-horizontal">
 <img alt="{{$slider->title}}"
     class="rev-slidebg" data-bgfit="cover" data-bgposition="right top"
     data-bgrepeat="no-repeat"
-    data-lazyload="{{$slider->image_mobile}}"
+    data-lazyload="{{$slider->image_desktop}}"
     src="{{$slider->image_desktop}}" />
 <div class="tp-caption tp-shape tp-shapewrapper" data-basealign="slide"
     data-frames="[{&quot;delay&quot;:0,&quot;speed&quot;:300,&quot;from&quot;:&quot;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:300,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]"

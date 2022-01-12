@@ -1,57 +1,76 @@
-  @component('index.layouts.content', [
-      'title' => 'Blogs',
-      'tabTitle' => 'Blogs',
-      'breadcrumb' => [
-          ['title' => 'Home', 'url' => route('index.home'), 'class' => 'bcHome'],
-          ['title' => 'Blogs', 'url' => route('index.blogs'), 'class' => 'bcHome'],
-          ['title' => $blog->title, 'class'  => 'bcLink bcCurrentLink']],
-      ])
+@component('index.layouts.content', [
+    'title' => 'Blogs',
+    'tabTitle' => 'Blogs',
+    'breadcrumb' => [
+        ['title' => 'Home', 'url' => route('index.home'), 'class' => 'bcHome'],
+        ['title' => 'Blogs', 'url' => route('index.blogs'), 'class' => 'bcHome'],
+        ['title' => $blog->title, 'class'  => 'bcLink bcCurrentLink']],
+    ])
 
 
-      @slot('slider')
+@slot('slider')
+ 
+
+
+{{-- @include('index.layouts.image_title', [  'title' => $blog->title , 'image_page' => $blog->image ]) --}}
+ 
+
+<link href="{{asset('certificate/css/fulimagebg.css')}}" rel="stylesheet" />
+@include('index.layouts.image_bgheader', [  'title' => $blog->title , 'image_page' => $blog->image ])
+ 
 
 
 
-      @endslot
+
+
+@endslot
 
 
 
-                                                                                                                                                                                                                                   <!-- Main content -->
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-        <!-- left col -->
-        <div class="btsLeftCol publiCol">
-            <p class="btsCatTitle">List All Blog</p>
-@foreach ($blogs as $listblog )
+      <div id="mainIntroSec">
+          <div class="container">
+              <div class="row">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <h1>{{$blog->title}}</h1>
 
-<p><a href="{{route('index.blog', $listblog->id ) }}" target="_top">{{$listblog->title}}</a></p>
+
+                      @php
+                      echo $blog->text;
+                  @endphp
+
+
+                  </div>
+              </div>
+ 
+
+ <hr>
+
+              @foreach ($blogs->chunk(4) as $chunk)
+              <div class="row"> 
+                @foreach ($chunk as  $key => $blog)
+                        
+ <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 btsBoxWrap">
+     <a href="{{route('index.blog', $blog->id ) }}">
+    <article class="btsBoxContent">
+        <div class="btsBoxImg"><img  src="{{$blog->image}}"  height="120px"></div>
+        <div class="btsBoxTit"> {{$blog->title}}</div>
+         <div class="btsBoxIntro"> </div>                        
+        </article></a>
+</div>
+                          
+          
 @endforeach
+</div>
+@endforeach 
 
-        </div>
-        <!-- end left col -->
+
+
+
+
+
+          </div>
       </div>
-      <div class="col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9">
-        <!-- main stories grid (6 per row)-->
-        <div class="row">
 
-                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 btsBoxWrap">
-                        <article class="btsBoxContent">
-                             <div class="btsBoxTit"><h2>{{$blog->title}}</h2></div>
-<hr>
-@php echo $blog->text; @endphp
-
-                            </div>
-
-
-
-
-                    </div>
-        <!-- end main stories grid -->
-        <a class="loadmoreBtn" href="{{route('index.blogs')}}">VIEW ALL BLOGS</a>
-      </div>
-    </div>
-  </div>
 
 
 

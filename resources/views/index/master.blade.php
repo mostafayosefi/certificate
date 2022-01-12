@@ -11,8 +11,8 @@
         {{$setting->title}}
          {{ $tabTitle ?? '' }}</title>
 
-          <meta content="" name="keywords" />
-         <meta  content=" " name="description" />
+          <meta content="{{$setting->keyword}}" name="keywords" />
+         <meta  content="{{$setting->description}}" name="description" />
          <meta content="index, follow" name="robots" />
          <link href="{{asset('certificate/css/jquery.bxslider.min.css')}}" rel="stylesheet" />
          <link href="{{asset('certificate/css/slick.css')}}" rel="stylesheet" />

@@ -16,11 +16,12 @@ class Menuindex{
         $setting=Setting::find(1);
         $textdeses=Txtdese::orderBy('id','DESC')->get();
         $awards=Award::orderBy('id','DESC')->get();
+        $limit_listpages=Page::limit('4')->orderBy('id','DESC')->get();
 
 // $view->with('listpages', $listpages);
 // $view->with('setting', $setting);
 
-$view->with(['listpages' => $listpages , 'setting' => $setting, 'textdeses' => $textdeses , 'awards' => $awards ]);
+$view->with(['listpages' => $listpages , 'setting' => $setting, 'textdeses' => $textdeses , 'awards' => $awards  , 'limit_listpages' => $limit_listpages ]);
 
 
     }

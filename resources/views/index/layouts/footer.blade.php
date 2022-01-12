@@ -104,7 +104,7 @@
                 <p>&#160;</p>
                 <p class="footerTit2">Myservice</p>
                 <ul>
-                    @foreach ($listpages as $page)
+                    @foreach ($limit_listpages as $page)
                         <li><a href="{{ route('index.service', $page) }}">{{ $page->title }}</a></li>
                     @endforeach
                 </ul>

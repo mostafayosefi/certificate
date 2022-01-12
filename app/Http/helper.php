@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Contact;
 use App\Models\Page;
 use App\Models\User;
 use App\Models\Slider;
@@ -115,6 +116,31 @@ if(! function_exists('date_frmat') ) {
 
 }
 
+//get date_frmat
+if(! function_exists('fmod_blog') ) {
+    function fmod_blog($date)
+    {
+$x=fmod($date, 3);
+if($x=='1'){return 'storiesContYell';}
+if($x=='2'){return 'storiesContBlue';}
+if($x=='0'){return 'storiesContGrey';}
+
+    }
+
+}
+
+
+//get status_read
+if(! function_exists('status_read') ) {
+    function status_read($status)
+    { 
+        if($status=='read'){ echo '<span class="label label-lg label-light-primary label-inline">خوانده شده</span>'; }
+        if($status=='unread'){ echo '<span class="label label-lg label-light-warning label-inline">خوانده نشده</span>'; }
+
+    }
+
+}
+
 
 
 if(! function_exists('urllink') ) {
@@ -223,6 +249,23 @@ if(! function_exists('Change_status') ) {
         $flag = $table->update([ 'status' => $status ]);
         return $flag;
 
+
+    }
+}
+
+
+
+
+
+if(! function_exists('Change_show') ) {
+    function Change_show($id, $table)
+    {
+        if($table=='contacts'){
+            $table= Contact::find($id);
+         }
+
+        $flag = $table->update([ 'show' => 'read' ]);
+        return $flag;
 
     }
 }

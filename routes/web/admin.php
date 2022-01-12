@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AwardController;
 use App\Http\Controllers\Admin\ComidController;
+use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\FetchController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\ContentController;
@@ -210,3 +211,12 @@ Route::prefix('fetch')
 });
  */
 
+
+
+
+Route::prefix('contact')
+->name('contact.')->group(function () {
+    Route::get('/', [ContactController::class, 'index'])->name('index'); 
+    Route::get('/{id}', [ContactController::class, 'show'])->name('show'); 
+    Route::delete('/{id}', [ContactController::class, 'destroy'])->name('destroy');
+});

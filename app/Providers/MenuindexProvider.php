@@ -25,7 +25,11 @@ class MenuindexProvider extends ServiceProvider
     public function boot()
     {
 
-       view()->composer([ 'admin.master', 'admin.layouts.sidebar' , 'index.layouts.header'  ,
+        view()->composer([ 'admin.master', 'admin.layouts.sidebar' , 'index.layouts.header'  ,
         'index.layouts.navbarmob'  , 'index.layouts.footer'   , 'index.master'   , 'index.footer'   ], Menuindex::class);
+
+        
+       view()->composer([ 'admin.master', 'admin.layouts.sidebar'  ], Menuindex::class);
+
     }
 }

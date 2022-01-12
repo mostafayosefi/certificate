@@ -56,6 +56,14 @@
                 </div>
                         @include('admin.layouts.table.avatar', [  'avatarimage' => $spotlite->image , 'class'=>'image-input-wrapper' , 'style' => '' , 'id_av' => '1'  , 'label' => 'آپلود عکس اسپوتلایت'  ])
 
+                        
+					<div class="form-group row">
+						<label  class="col-2 col-form-label">لینک عکس</label>
+						<div class="col-10">
+							<input class="form-control"  type="text"  value="{{asset($spotlite->image)}}" />
+						</div>
+					</div>
+
 
                         @method('PUT')
                         <div class="row">

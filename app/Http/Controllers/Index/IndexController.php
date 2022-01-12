@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Session;
 use RealRashid\SweetAlert\Facades\Alert;
 use phpDocumentor\Reflection\Types\Null_;
 use App\Models\Blog;
+use App\Models\Contact;
 
 class IndexController extends Controller
 {
@@ -51,7 +52,8 @@ class IndexController extends Controller
 
     public function contactus(){
         $txtdese= Txtdese::find(3);
-        return view('index.home.contactus' , compact(['txtdese'  ]));
+        $infocontact= Txtdese::find(5);
+        return view('index.home.contactus' , compact(['txtdese' , 'infocontact' ]));
     }
 
     public function store_contact(Request $request){
@@ -59,6 +61,17 @@ class IndexController extends Controller
         $request->validate([
             'captcha' => 'captcha'
         ]);
+
+        $data = $request->all();
+
+/*
+
+        $data['image_desktop']  =  uploadFile($request->file('image1'),'images/sliders','');
+        $data['image_mobile']  =  uploadFile($request->file('image2'),'images/sliders',''); */
+
+
+    Contact::create($data);
+
 
     return back()->with(['success_index' => 'Your message was successfully sent to management' ]);
     }
