@@ -102,9 +102,4 @@ Route::get('/optimize-clear', function() {
 
 
 
-
-Route::get('/myytest', function () {
-
-dd('salam');
-
-})->name('myytest');
+ 
