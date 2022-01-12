@@ -52,7 +52,6 @@
 
 
 @if($tracking)
-
 @include('index.layouts.image_tracking', [  'title' => 'Contact Us' , 'image_page' => $tracking->image ])
 @endif
 

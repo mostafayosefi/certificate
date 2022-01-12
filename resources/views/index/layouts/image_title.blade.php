@@ -58,7 +58,7 @@
 
 
 
-    <!-- CTA bar -->
+    <!-- CTA barr  -->
     <div class="hp-cta-bar">
         <div class="row no-gutters ">
 
