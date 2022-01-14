@@ -13,7 +13,7 @@
 
             <div class="mob col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                 <div class="hp-cta-bar-sect2">
-                    <a class="lineSepBtnR" href="{{route('index.home')}}">
+                    <a class="lineSepBtnR" href="{{ route('index.home') }}">
                         <i class="fas fa-home centerBlockIcon"></i>Home</a>
                 </div>
             </div>
@@ -29,7 +29,7 @@
 
             <div class="mob col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                 <div class="hp-cta-bar-sect2">
-                    <a class="lineSepBtn" href="{{route('index.tracking')}}"><i
+                    <a class="lineSepBtn" href="{{ route('index.tracking') }}"><i
                             class="fa fa-search centerBlockIcon"></i>Tracking</a>
                 </div>
             </div>
@@ -56,8 +56,7 @@
             <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <div class="mainLogo mainLogo2">
                     <a href="#">
-                        <img alt="" class="imgRes"
-                             src="{{$setting->logo}}"  width="373px" height="90px"  />
+                        <img alt="" class="imgRes" src="{{ $setting->logo }}" width="373px" height="90px" />
                     </a>
                 </div>
             </div>
@@ -65,85 +64,101 @@
 
             <div class="col-12 col-sm-12 col-md-10 col-lg-1 col-xl-10">
 
-            <nav class="navbar navbar-expand-lg navbar-dark justify-content-between">
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav mr-auto">
+                <nav class="navbar navbar-expand-lg navbar-dark justify-content-between">
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav mr-auto">
 
 
 
 
 
-                        {{-- onlineLink --}}
-
-                        <li class="nav-item dropdown  ">
-                            <a class="nav-link dropdown-toggle" href="{{route('index.home')}}">Home</a>
-                        </li>
-
-
-                        <li class="nav-item dropdown">
-
-                            <a class="nav-link dropdown-toggle" href="#">Service</a>
-
-                            <div class="dropdown-menu">
-
-                                <div class="">
-                                    <div class="row">
-                                        <div class="col-md-4">
-
-
-                                            <ul class="nav flex-column" itemscope="itemscope"
-                                                itemtype="">
 
 
 
-                                @foreach ($listpages as $page )
-                                <li class="nav-item" itemprop="name"><a class="nav-link"
-                                    href="{{ route('index.service', $page) }}" itemprop="url">
-                                    {{$page->title}}</a></li>
-                                     @endforeach
+
+                            {{-- onlineLink --}}
+
+                            <li class="nav-item dropdown  ">
+                                <a class="nav-link dropdown-toggle" href="{{ route('index.home') }}">Home</a>
+                            </li>
 
 
 
-                                            </ul>
+
+                            <li class="nav-item dropdown">
+
+                                <a class="nav-link dropdown-toggle" href="#">Service</a>
+
+                                <div class="dropdown-menu">
+
+                                    <div class="">
+                                        <div class="row">
+
+
+
+                                            @foreach ($listpages->chunk(2) as $chunk)
+                                            <div class="col-md-4">
+                                                <ul class="nav flex-column" itemscope="itemscope"
+                                                    itemtype="http://www.schema.org/SiteNavigationElement">
+
+
+
+                                                    @foreach ($chunk as $key => $page)
+                                                    <li class="nav-item" itemprop="name"><a class="nav-link"
+                                                            href="{{ route('index.service', $page) }}"
+                                                            itemprop="url">{{ $page->title }}</a></li>
+                                                    @endforeach
+
+
+
+
+                                                </ul>
+                                            </div>
+                                            @endforeach
+
+
+
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
+
+
+
+
+ 
 
 
 
 
 
+                            <li class="nav-item dropdown  ">
+                                <a class="nav-link dropdown-toggle" href="{{ route('index.faqs') }}">Faqs</a>
+                            </li>
+
+                            <li class="nav-item dropdown  ">
+                                <a class="nav-link dropdown-toggle" href="{{ route('index.blogs') }}">Blogs</a>
+                            </li>
 
 
 
-                        <li class="nav-item dropdown  ">
-                            <a class="nav-link dropdown-toggle" href="{{route('index.faqs')}}">Faqs</a>
-                        </li>
-
-                        <li class="nav-item dropdown  ">
-                            <a class="nav-link dropdown-toggle" href="{{route('index.blogs')}}">Blogs</a>
-                        </li>
+                            <li class="nav-item dropdown  ">
+                                <a class="nav-link dropdown-toggle" href="{{ route('index.contactus') }}">Contact Us</a>
+                            </li>
 
 
+                            <li class="nav-item dropdown">
 
-                        <li class="nav-item dropdown  ">
-                            <a class="nav-link dropdown-toggle" href="{{route('index.contactus')}}">Contact Us</a>
-                        </li>
-
-
-                        <li class="nav-item dropdown">
-
-                            <a class="nav-link"  href="{{route('index.tracking')}}"  style="color: #ebbf14;">Traking<i class="fas fa-search searchIcon"></i></a>
-                        </li>
-                    </ul>
-                    <!-- Top bar Mobile -->
-                </div>
-            </nav>
+                                <a class="nav-link" href="{{ route('index.tracking') }}"
+                                    style="color: #ebbf14;">Traking<i class="fas fa-search searchIcon"></i></a>
+                            </li>
+                        </ul>
+                        <!-- Top bar Mobile -->
+                    </div>
+                </nav>
 
 
-        </div>
+            </div>
             <!-- END Menu section -->
         </div>
     </div>
@@ -157,9 +172,7 @@
     <div class="row ">
         <div class="col d-flex justify-content-between">
             <a class="#">
-                <img alt="" class=""
-                {{-- src="{{$setting->logo}}"  width="373px" height="90px"  --}}
-                 />
+                <img alt="" class="" {{-- src="{{$setting->logo}}"  width="373px" height="90px" --}} />
             </a>
             <button aria-label="menu toggle" class="toggle-id-1 barsIcon">
                 <i class="fas fa-bars"></i>

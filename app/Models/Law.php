@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Law extends Model
 {
 
+    protected $fillable = [
+        'text',
+        'setting_id',
+        'licens',
+    ];
+
+
     public function setting(){
         return $this->belongsTo(Setting::class  , 'setting_id' , 'id');
     }

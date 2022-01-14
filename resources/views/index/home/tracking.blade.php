@@ -14,7 +14,7 @@
 
 @slot('slider')
 
-@include('index.layouts.image_title', [  'title' => 'Contact Us' , 'image_page' => $txtdese->image ])
+@include('index.layouts.image_title', [  'title' => 'Tracking' , 'image_page' => $txtdese->image ])
 
 @endslot
 
@@ -35,6 +35,9 @@
                               <div class="row">
                                 <div class="col-12 col-sm-1 col-md-1 col-lg-1 col-xl-1"></div>
                                 <div class="col-12 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+
+
+@if(!$tracking)
                                     <h1 class="searchPageTitle">Search for evidence</h1>
                                     <form   method="POST" action="{{ route('index.tracking.result') }}"  class="searchForm">
                                         @csrf
@@ -49,6 +52,7 @@
                                         <button class="btn btnYellow" type="submit">Search
                                         </button>
                                     </form>
+                                    @endif
 
 
 @if($tracking)

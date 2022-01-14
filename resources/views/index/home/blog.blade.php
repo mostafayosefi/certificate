@@ -12,12 +12,12 @@
  
 
 
-{{-- @include('index.layouts.image_title', [  'title' => $blog->title , 'image_page' => $blog->image ]) --}}
+@include('index.layouts.image_title', [  'title' => $blog->title , 'image_page' => $blog->image ])
  
-
+{{-- 
 <link href="{{asset('certificate/css/fulimagebg.css')}}" rel="stylesheet" />
 @include('index.layouts.image_bgheader', [  'title' => $blog->title , 'image_page' => $blog->image ])
- 
+  --}}
 
 
 

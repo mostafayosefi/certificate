@@ -10,14 +10,15 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AwardController;
 use App\Http\Controllers\Admin\ComidController;
-use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\FetchController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\ContentController;
+use App\Http\Controllers\Admin\ProfileController;
+
 use App\Http\Controllers\Admin\SettingController;
 
 use App\Http\Controllers\Admin\TextdesController;
-
 use App\Http\Controllers\Admin\SpotliteController;
 use App\Http\Controllers\Admin\TrackingController;
 
@@ -216,7 +217,18 @@ Route::prefix('fetch')
 
 Route::prefix('contact')
 ->name('contact.')->group(function () {
-    Route::get('/', [ContactController::class, 'index'])->name('index'); 
-    Route::get('/{id}', [ContactController::class, 'show'])->name('show'); 
+    Route::get('/', [ContactController::class, 'index'])->name('index');
+    Route::get('/{id}', [ContactController::class, 'show'])->name('show');
     Route::delete('/{id}', [ContactController::class, 'destroy'])->name('destroy');
+});
+
+
+
+Route::prefix('profile')
+->name('profile.')->group(function () {
+    Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
+    Route::put('/edit', [ProfileController::class, 'update'])->name('update');
+    Route::get('/secret', [ProfileController::class, 'secret'])->name('secret');
+    Route::put('/change_password', [ProfileController::class, 'change_password'])->name('change_password');
+    Route::put('/logout', [ProfileController::class, 'logout'])->name('logout');
 });

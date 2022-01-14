@@ -53,13 +53,14 @@ class AdminAuthController extends Controller
   if (Auth::guard('admin')->user()) {
 return redirect()->route('admin.dashboard');
         }
-
-/*    $user = Admin::create([
+/*
+   $user = Admin::create([
     'name' => 'مدیریت سایت' ,
+    'username'=> 'mustafa1390',
     'email'=> 'mustafa1390@gmail.com',
     'password'=> Hash::make('123456'),
-]); */
-
+]);
+ */
         // dd('hi');
 
 

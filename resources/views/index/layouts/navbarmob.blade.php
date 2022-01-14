@@ -71,29 +71,48 @@
 
 
 
-                    <li class="nav-item mob mobNBig audienceWrap">
-                        <!-- select menu -->
-                        <div class="infoNav" id="myinfoNavMob">
-                            <div class="dropdownInfo">
-                                <button class="dropbtn topcatwrap infoSelectMob">
-                                    <span>service</span>
-                                    <i class="fas fa-caret-square-down caretDown"></i>
-                                </button>
-                                <div class="dropdownInfo-content-mob myinfoNavMob">
-                                    <div class="dropdownInfoScroll-mob">
+                    <li class="nav-item dropdown">
+
+                        <div class="dropdownIndLink topcatwrap">
+                <a class="nav-link" href="/news/index.html">Service</a>
+                                    <button aria-expanded="false" aria-haspopup="true" aria-label="Click to expand submenu links" class="dropdown-toggle caretDown" data-toggle="dropdown">
+                      <i aria-hidden="true" class="fas fa-caret-square-down" title="click to expand open sublinks"></i>
+                  </button>
+              </div>
+                      <div class="dropdown-menu dropdownSubMenuMob">
+   @foreach ($listpages->chunk(2) as $chunk)
+   <ul class="nav flex-column" itemscope="itemscope" itemtype="http://www.schema.org/SiteNavigationElement">
+    @foreach ($chunk as $key => $page)
+    <li class="nav-item" itemprop="name"><a class="nav-link" href="{{ route('index.service', $page) }}" itemprop="url">{{$page->title}}</a></li>
+    @endforeach
+   </ul>
+    @endforeach
+
+  </div>
+</li>
 
 
-                                        <span class="ddTitle">Service Web</span>
+<li class="nav-item dropdown">
 
-                                @foreach ($listpages as $page )
-                                    <a href="{{ route('index.service', $page) }}" >{{$page->title}}</a>
-                                @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end select menu -->
-                    </li>
+    <div class="dropdownIndLink topcatwrap">
+<a class="nav-link" href="/news/index.html">List of blogs </a>
+                <button aria-expanded="false" aria-haspopup="true" aria-label="Click to expand submenu links" class="dropdown-toggle caretDown" data-toggle="dropdown">
+  <i aria-hidden="true" class="fas fa-caret-square-down" title="click to expand open sublinks"></i>
+</button>
+</div>
+  <div class="dropdown-menu dropdownSubMenuMob">
+@foreach ($listblogs->chunk(2) as $chunk)
+<ul class="nav flex-column" itemscope="itemscope" itemtype="http://www.schema.org/SiteNavigationElement">
+@foreach ($chunk as $key => $blog)
+<li class="nav-item" itemprop="name"><a class="nav-link" href="{{ route('index.blog', $blog) }}" itemprop="url">{{$blog->title}}</a></li>
+@endforeach
+</ul>
+@endforeach
+
+</div>
+</li>
+
+
 
 
 
