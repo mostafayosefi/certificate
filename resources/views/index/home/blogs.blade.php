@@ -31,7 +31,7 @@
                     href="{{route('index.blog', $blog->id ) }}">
                     <div class="{{ fmod_blog($key + 1) }} center btsImg">
                         <img alt="{{$blog->title}}" class="imgRes dramaPhoto"
-                            src="{{$blog->image}}" height="240px"  />
+                            src="{{$blog->image}}" height="140px"  />
 
 
                         <p style="background-color: rgba(67, 65, 180, 0.582); color:#fff "> {{$blog->title}}</p>
@@ -54,7 +54,7 @@
 
 
 
- 
+
       @slot('script')
       @endslot
   @endcomponent
