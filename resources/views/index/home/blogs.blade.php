@@ -20,7 +20,7 @@
         <div class="container-fluid">
 
             @php
-            echo $txtdese->text;
+            // echo $txtdese->text;
         @endphp
 
         <br>

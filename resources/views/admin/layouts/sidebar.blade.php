@@ -346,13 +346,13 @@
                                     <i class="menu-bullet menu-bullet-dot"><span></span></i>
                                     <span class="menu-text">مدیریت اسپوتلایت</span></a>
                             </li>
- 
 
-                            <li class="menu-item  {{ isShow(['admin.manegement.spotlites']) }}" aria-haspopup="true">
+
+  {{--                           <li class="menu-item  {{ isShow(['admin.manegement.spotlites']) }}" aria-haspopup="true">
                                 <a href="{{ route('index.home') }}" target="_blank" class="menu-link ">
                                     <i class="menu-bullet menu-bullet-dot"><span></span></i>
                                     <span class="menu-text">مشاهده ایندکس</span></a>
-                            </li>
+                            </li> --}}
 
                         </ul>
                     </div>
@@ -465,17 +465,17 @@
                             <li class="menu-item {{ isShow(['admin.contact.index']) }}" aria-haspopup="true">
                                 <a href="{{ route('admin.contact.index') }}" class="menu-link ">
                                     <i class="menu-bullet menu-bullet-dot"><span></span></i>
-                                    <span class="menu-text">مشاهده پیامهای کاربران   
+                                    <span class="menu-text">مشاهده پیامهای کاربران
 
                                         @if($unread_contact!='0')
  &NonBreakingSpace; <span class="label label-inline label-light-primary font-weight-bold">{{$unread_contact}}</span>
                                         @endif
                                     </span>
-                                
+
 
                                 </a>
                             </li>
- 
+
 
                         </ul>
                     </div>

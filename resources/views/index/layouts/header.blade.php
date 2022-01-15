@@ -56,7 +56,7 @@
             <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <div class="mainLogo mainLogo2">
                     <a href="#">
-                        <img alt="" class="imgRes" src="{{ $setting->logo }}" width="373px" height="90px" />
+                        <img alt="" class="imgRes" src="{{ $setting->logo }}"  />
                     </a>
                 </div>
             </div>
@@ -126,7 +126,7 @@
 
 
 
- 
+
 
 
 
