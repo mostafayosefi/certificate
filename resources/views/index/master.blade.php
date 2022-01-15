@@ -50,6 +50,7 @@
          <!-- Clive tracking script -->
 
          <link rel="shortcut icon" href="{{$setting->favicon}}"/>
+         <meta name="msvalidate.01" content="594385FB78084A685DFC420A86BDA033" />
     @yield('style')
 </head>
 

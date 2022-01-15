@@ -3,9 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\CapchaController;
 use App\Http\Controllers\Index\IndexController;
 use App\Http\Controllers\Auth\AdminAuthController;
-use App\Http\Controllers\CapchaController;
+use App\Http\Controllers\Index\SitemapXmlController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,9 +36,9 @@ Route::name('index.')->group(function () {
     Route::put('/tracking', [IndexController::class, 'tracking_result'])->name('tracking.result');
     Route::get('/blogs', [IndexController::class, 'blogs'])->name('blogs');
     Route::get('/blog/{id}', [IndexController::class, 'blog'])->name('blog');
+    Route::get('/sitemap.xml', [SitemapXmlController::class, 'sitemap']);
 
 });
-
 
 
 
@@ -102,4 +103,4 @@ Route::get('/optimize-clear', function() {
 
 
 
- 
+

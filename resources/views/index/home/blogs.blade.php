@@ -6,17 +6,24 @@
       ])
 
 
-      @slot('slider')
 
+@slot('slider')
 
+@include('index.layouts.image_title', [ 'title' => 'Blogs' , 'image_page' => $txtdese->image ])
 
-      @endslot
+@endslot
 
 
 
 
       <div class="homeSection" id="todayStories">
         <div class="container-fluid">
+
+            @php
+            echo $txtdese->text;
+        @endphp
+
+        <br>
 
 
           @foreach ($blogs->chunk(3) as $chunk)

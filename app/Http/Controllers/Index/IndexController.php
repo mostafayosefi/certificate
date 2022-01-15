@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Index;
 
 use App\Models\Faq;
+use App\Models\Blog;
 use App\Models\Page;
 use App\Models\Slider;
+use App\Models\Contact;
 use App\Models\Txtdese;
 use App\Models\Spotlite;
 use App\Models\Tracking;
@@ -13,8 +15,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use RealRashid\SweetAlert\Facades\Alert;
 use phpDocumentor\Reflection\Types\Null_;
-use App\Models\Blog;
-use App\Models\Contact;
+use App\Http\Controllers\Index\SitemapXmlController;
 
 class IndexController extends Controller
 {
@@ -41,7 +42,8 @@ class IndexController extends Controller
 
     public function blogs(){
         $blogs= Blog::all();
-        return view('index.home.blogs' , compact([ 'blogs' ]));
+        $txtdese= Txtdese::find(6);
+        return view('index.home.blogs' , compact([ 'blogs' , 'txtdese' ]));
     }
 
     public function blog($id){
