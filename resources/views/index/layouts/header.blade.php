@@ -84,7 +84,6 @@
 
 
 
-
                             <li class="nav-item dropdown">
 
                                 <a class="nav-link dropdown-toggle" href="#">Service</a>
@@ -96,8 +95,8 @@
 
 
 
-                                            @foreach ($listpages->chunk(2) as $chunk)
-                                            <div class="col-md-4">
+                                            @foreach ($listpages->chunk(1) as $chunk)
+                                            <div class="col-md-6">
                                                 <ul class="nav flex-column" itemscope="itemscope"
                                                     itemtype="http://www.schema.org/SiteNavigationElement">
 
@@ -108,6 +107,7 @@
                                                             href="{{ route('index.service', $page) }}"
                                                             itemprop="url">{{ $page->title }}</a></li>
                                                     @endforeach
+
 
 
 
