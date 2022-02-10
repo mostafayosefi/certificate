@@ -17,7 +17,6 @@ class CreateLawsTable extends Migration
             $table->bigIncrements('id');
             $table->mediumText('text');
             $table->bigInteger('setting_id')->unsigned()->index();
-            $table->string('licens')->nullable();
             $table->timestamps();
 
             $table->foreign('setting_id')->references('id')->on('settings')->onDelete('cascade')->onUpdate('cascade');
